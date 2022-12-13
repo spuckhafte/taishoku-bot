@@ -1,4 +1,4 @@
-import Discord, { Intents } from 'discord.js';
+import Discord, { Intents, Interaction } from 'discord.js';
 import CmdManager from './manager';
 
 import dotenv from 'dotenv';
@@ -19,5 +19,12 @@ const client = new Discord.Client({
 client.on('ready', () => {
     console.log('connected');
 })
+
+client.on('interactionCreate', async Interaction => {
+    if (!Interaction.isCommand()) return;
+    
+    let cmdName = Interaction.commandName;
+    Commando.run(cmdName, { Interaction });
+});
 
 client.login(process.env.TOKEN);

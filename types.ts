@@ -1,5 +1,3 @@
-import { Channel } from 'discord.js'
-
 type Manager = {
     [index: string]: CallableFunction
 };
@@ -8,6 +6,6 @@ type StdObject = {
     [index: string]: any
 }
 
-type ExistingCmds = 'ping';
+type ExistingCmds = 'Ping';
 
 export { Manager, ExistingCmds, StdObject };

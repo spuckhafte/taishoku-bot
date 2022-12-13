@@ -2,7 +2,7 @@ import { Manager, StdObject } from "./types";
 import fs from 'fs';
 
 class CmdManager {
-    cmdRegister:Manager;
+    ResgisteredCommands:Manager;
 
     constructor(folder:string, ts=false) {
         let fileType = ts ? '.ts' : '.js';
@@ -11,14 +11,14 @@ class CmdManager {
                 if (file.endsWith(fileType)) {
                     const func:CallableFunction = require(`${folder}/${file}`).default;
                     let fileName = file.replace(fileType, '');
-                    this.cmdRegister = { ...this.cmdRegister },
-                    this.cmdRegister[fileName] = func;
+                    this.ResgisteredCommands = { ...this.ResgisteredCommands },
+                    this.ResgisteredCommands[fileName] = func;
                 };
             })
         });
     };
 
-    run = (cmdName:string, args:StdObject) => this.cmdRegister[cmdName](args);
+    run = (cmdName:string, args:StdObject) => this.ResgisteredCommands[cmdName](args);
 };
 
 export default CmdManager;
