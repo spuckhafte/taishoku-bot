@@ -1,10 +1,13 @@
-import Discord, { Intents, Interaction } from 'discord.js';
+import Discord, { Intents } from 'discord.js';
+import mongoose from 'mongoose';
+
+import User from './schema/User.js';
 import CmdManager from './manager';
-
 import dotenv from 'dotenv';
-dotenv.config();
 
+dotenv.config();
 const Commando = new CmdManager('./commands', true);
+mongoose.connect(process.env.DB ?? "");
 
 const client = new Discord.Client({
     intents: [
@@ -16,7 +19,7 @@ const client = new Discord.Client({
     ]
 });
 
-client.on('ready', () => {
+client.on('ready', async () => {
     console.log('connected');
 })
 
