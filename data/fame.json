@@ -1,0 +1,18 @@
+{
+    "ramen": 5,
+    "boost": 2000,
+    "nb": 0.3,
+    
+    "events": {
+        
+    },
+    "roles": {
+
+    },
+
+    "to-elixir": 0.0001,
+    "tax": {
+        "transfer": 5,
+        "to-elixir": 25
+    }
+}
