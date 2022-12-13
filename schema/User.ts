@@ -4,54 +4,117 @@ const usersSchema = new mongoose.Schema({
     username: String,
     id: String,
     started: Number, // timestamp
-    totalFame: Number,
-    totalElixir: Number,
+    totalFame: {
+        type: Number,
+        default: 0
+    },
+    totalElixir: {
+        type: Number,
+        default: 0
+    },
 
     ramen: {
-        votes: Number,
-        lastVote: Number,
-        fameCollected: Number,
-        elixirCollected: Number
+        votes: {
+            type: Number,
+            default: 0
+        },
+        lastVote: {
+            type: Number,
+            default: 0
+        },
+        fameCollected: {
+            type: Number,
+            default: 0
+        },
+        elixirCollected: {
+            type: Number,
+            default: 0
+        },
     },
 
     nb: {
-        fameCollected: Number,
-        elixirCollected: Number
+        fameCollected: {
+            type: Number,
+            default: 0
+        },
+        elixirCollected: {
+            type: Number,
+            default: 0
+        },
     },
 
     roles: {
-        currentHighestRole: Number, // id
-        when: Number,
-        fameCollected: Number,
-        elixirCollected: Number,
+        currentHighestRole: {
+            type: Number,
+            default: 0
+        }, // id
+        when: {
+            type: Number,
+            default: 0
+        },
+        fameCollected: {
+            type: Number,
+            default: 0
+        },
+        elixirCollected: {
+            type: Number,
+            default: 0
+        },
 
-        prevHigestRoles: [{
-            role: String,
-            duration: Number,
-            fameCollected: Number,
-            elixirCollected: Number
-        }]
+        prevHigestRoles: {
+            type: [{
+                role: String,
+                duration: Number,
+                fameCollected: Number,
+                elixirCollected: Number
+            }],
+            default: []
+        }
     },
 
     nitro: {
-        boosts: Number,
-        purchased: Number,
-        fameCollected: Number,
-        elixirCollected: Number
+        boosts: {
+            type: Number,
+            default: 0
+        },
+        purchased: {
+            type: Number,
+            default: 0
+        },
+        fameCollected: {
+            type: Number,
+            default: 0
+        },
+        elixirCollected: {
+            type: Number,
+            default: 0
+        },
     },
 
     events: {
-        eventsWon: Number,
-        fameCollected: Number,
-        elixirCollected: Number,
+        eventsWon: {
+            type: Number,
+            default: 0
+        },
+        fameCollected: {
+            type: Number,
+            default: 0
+        },
+        elixirCollected: {
+            type: Number,
+            default: 0
+        },
 
-        eventDetails: [{
-            eventName: String,
-            when: Number,
-            rank: Number,
-            fameCollected: Number,
-            elixirCollected: Number
-        }],
+        eventDetails: {
+            type: [{
+                eventName: String,
+                when: Number,
+                rank: Number,
+                fameCollected: Number,
+                elixirCollected: Number
+            }],
+            default: []
+        }
     }
 
 });
