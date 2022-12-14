@@ -1,10 +1,9 @@
 import Users from '../schema/User';
-import { Client, User } from 'discord.js';
+import { Client } from 'discord.js';
+import impVar from '../data/impVar.json'
 
-const TAISHOKU_SERVER_ID = '1011682272673533973';
-
-export default async (client:Client) => {
-    const server = await client.guilds.fetch(TAISHOKU_SERVER_ID);
+export default async (client:Client):Promise<void> => {
+    const server = await client.guilds.fetch(impVar.TAISHOKU_SERVER_ID);
     (await server.members.fetch()).forEach(async member => {
         if (member.user.bot) return;
 
