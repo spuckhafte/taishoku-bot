@@ -8,4 +8,6 @@ type StdObject = {
 
 type ExistingCmds = 'Ping';
 
-export { Manager, ExistingCmds, StdObject };
+type SchemaKeys = 'ramen'|'nb'|'roles'|'nitro'|'events';
+
+export { Manager, ExistingCmds, StdObject, SchemaKeys };
