@@ -1,4 +1,4 @@
-import { Manager, StdObject } from "./types";
+import { Manager, CmdoArgs } from "./types";
 import fs from 'fs';
 
 class CmdManager {
@@ -18,7 +18,7 @@ class CmdManager {
         });
     };
 
-    run = (cmdName:string, args:StdObject) => this.ResgisteredCommands[cmdName](args);
+    run = (cmdName:string, args:CmdoArgs) => this.ResgisteredCommands[cmdName](args);
 };
 
 export default CmdManager;

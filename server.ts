@@ -1,10 +1,11 @@
 import Discord, { Intents } from 'discord.js';
 import mongoose from 'mongoose';
 
-import User from './schema/User.js';
+import User from './schema/User';
 import CmdManager from './manager';
 import dotenv from 'dotenv';
 import intializeRamenVoteListener from './helpers/ramenVote';
+import registerAll from './helpers/registerAll';
 
 dotenv.config();
 const Commando = new CmdManager('./commands', true);
@@ -21,8 +22,12 @@ const client = new Discord.Client({
     ]
 });
 
+
 client.on('ready', async () => {
     console.log(`Logged in as ${client.user?.username}`);
+    
+    // await User.deleteMany({});
+    // registerAll(client);
 })
 
 client.on('interactionCreate', async Interaction => {
@@ -37,3 +42,5 @@ socket.on('upvote', async data => {
 })
 
 client.login(process.env.TOKEN);
+
+export default client;

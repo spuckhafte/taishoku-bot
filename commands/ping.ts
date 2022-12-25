@@ -1,9 +1,7 @@
-import { StdObject } from '../types'
-import { CommandInteraction } from 'discord.js'
+import { CmdoArgs } from '../types'
 
-export default (args:StdObject):void => {
-    const interaction:CommandInteraction = args.Interaction;
-    interaction.reply({
+export default (args:CmdoArgs):void => {
+    args.Interaction.reply({
         content: 'Pong!',
         ephemeral: true
     });

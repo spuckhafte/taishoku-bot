@@ -5,7 +5,7 @@ import impVar from '../data/impVar.json'
 export default async (client:Client):Promise<void> => {
     const server = await client.guilds.fetch(impVar.TAISHOKU_SERVER_ID);
     (await server.members.fetch()).forEach(async member => {
-        if (member.user.bot) return;
+        // if (member.user.bot) return; for testing purposes
 
         if ((await Users.findOne({ id: member.id }))) {
             console.log('user-exists');
