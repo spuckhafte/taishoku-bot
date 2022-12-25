@@ -103,20 +103,22 @@ const usersSchema = new mongoose.Schema({
         elixirCollected: {
             type: Number,
             default: 0
-        },
-
-        eventDetails: {
-            type: [{
-                eventName: String,
-                when: Number,
-                rank: Number,
-                fameCollected: Number,
-                elixirCollected: Number
-            }],
-            default: []
         }
+    },
+    noroot: { // no root of purpose
+        fameCollected: {
+            type: Number,
+            default: 0
+        },
+        elixirCollected: {
+            type: Number,
+            default: 0
+        }
+    },
+    spent: {
+        fameCollected: Number,
+        elixirCollected: Number
     }
-
 });
 
 const Users = mongoose.model("users", usersSchema);
