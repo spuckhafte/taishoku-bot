@@ -32,7 +32,11 @@ const usersSchema = new mongoose.Schema({
         },
     },
 
-    nb: {
+    missions: {
+        missionsCompleted: {
+            type: Number,
+            default: 0
+        },
         fameCollected: {
             type: Number,
             default: 0
@@ -44,14 +48,9 @@ const usersSchema = new mongoose.Schema({
     },
 
     roles: {
-        currentHighestRole: {
-            type: Number,
-            default: 0
-        }, // id
-        when: {
-            type: Number,
-            default: 0
-        },
+        currentHighestRole: String, // id
+        highestWhen: String,
+
         fameCollected: {
             type: Number,
             default: 0
@@ -61,14 +60,9 @@ const usersSchema = new mongoose.Schema({
             default: 0
         },
 
-        prevHigestRoles: {
-            type: [{
-                role: String,
-                duration: Number,
-                fameCollected: Number,
-                elixirCollected: Number
-            }],
-            default: []
+        highestRole: {
+            position: Number,
+            id: String
         }
     },
 
@@ -115,9 +109,29 @@ const usersSchema = new mongoose.Schema({
             default: 0
         }
     },
+    invites: {
+        total: {
+            type: Number,
+            default: 0
+        },
+        fameCollected: {
+            type: Number,
+            default: 0
+        },
+        elixirCollected: {
+            type: Number,
+            default: 0
+        }
+    },
     spent: {
-        fameCollected: Number,
-        elixirCollected: Number
+        fameCollected: {
+            type: Number,
+            default: 0
+        },
+        elixirCollected: {
+            type: Number,
+            default: 0
+        }
     }
 });
 
