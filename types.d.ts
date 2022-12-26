@@ -12,7 +12,7 @@ export type CmdoArgs = {
     Interaction: CommandInteraction
 }
 
-export type ExistingCmds = 'ping' | 'distribute';
+export type ExistingCmds = 'ping' | 'distribute' | 'profile';
 export type Currencies = 'fame' | 'elixir';
 
-export type Purposes = 'ramen'|'nb'|'roles'|'nitro'|'events'|'noroot'
+export type Purposes = 'ramen'|'missions'|'roles'|'nitro'|'events'|'noroot'|'invites'

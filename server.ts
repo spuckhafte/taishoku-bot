@@ -9,7 +9,7 @@ import registerAll from './helpers/registerAll';
 
 dotenv.config();
 const Commando = new CmdManager('./commands', true);
-mongoose.connect(process.env.DB ?? "");
+mongoose.connect(process.env.DB ?? "", (e) => console.log(e ? e : '[connected to db]'));
 const { socket, processVote } = intializeRamenVoteListener();
 
 const client = new Discord.Client({
@@ -27,6 +27,7 @@ client.on('ready', async () => {
     console.log(`Logged in as ${client.user?.username}`);
     
     // await User.deleteMany({});
+    // console.log('g')
     // registerAll(client);
 })
 

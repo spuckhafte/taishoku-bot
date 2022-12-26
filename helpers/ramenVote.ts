@@ -6,7 +6,7 @@ import updateDb from "./updateDb";
 export default () => {
     const socket = io(RAMEN_VOTING_SYSTEM_SERVER);
     socket.emit('handshake', RAMEN_ID)
-    socket.on('connected', ok => console.log(ok + ' -connected to RAMEN_VOTING_SYSTEM_SERVER'));
+    socket.on('connected', () => console.log('[connected to RAMEN_VOTING_SERVER]'));
     return {
         socket,
         processVote
@@ -18,7 +18,7 @@ async function processVote(data:any) {
     let voterId:string = data.user;
     let user = await Users.findOne({ id: voterId });
     if (!user || !user.ramen || isNaN(user.ramen.votes)) {
-        console.log('User does not exists')
+        console.log('[Voter does not exists in the guild]')
         return 0;
     }
     updateDb({ id: voterId }, 'ramen.votes', user.ramen.votes + 1);
