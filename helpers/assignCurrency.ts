@@ -41,7 +41,7 @@ async function spendElixir(userId:string, elixir:number) {
     if (!user) return;
     updateDb({ id: userId }, 'totalElixir', +user.totalElixir - elixir);
     
-    let prevCash = user.spent?.fameCollected;
+    let prevCash = user.spent?.elixirCollected;
     const finalActivitySpecificElixir = (prevCash ? prevCash : 0) + elixir;
     updateDb({ id:userId }, 'spent.elixirCollected', finalActivitySpecificElixir);
 };
