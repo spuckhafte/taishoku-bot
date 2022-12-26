@@ -5,9 +5,11 @@ import updateCurrency from '../helpers/assignCurrency'
 import { CmdoArgs } from "../types";
 import { TAISHOKU_SERVER_ID } from '../data/impVar.json'
 import money from '../data/money.json';
+import { getUsersByRole, isUserOrRole } from '../helpers/toolbox'
 import { GuildMember, MessageEmbed } from "discord.js";
+import emojis from '../data/emojis.json';
 
-const schemaKeys:string[] = ["ramen", "events", "nb", "nitro", "roles"];
+const schemaKeys:string[] = ["ramen", "events", "missions", "nitro", "roles", "invites"];
 
 export default async (args:CmdoArgs) => {
     const interaction = args.Interaction;
@@ -44,28 +46,17 @@ export default async (args:CmdoArgs) => {
         return;
     }
 
-    let targetType:string;
-    try {
-        await server.members.fetch(target);
-        targetType = 'user';
-    } catch (e) {
-        targetType = 'role';
-    }
-
-    let membCount = 0;
-    let members:GuildMember[] = []
+    let targetType = await isUserOrRole(target);
+    
+    let membCount:number;
+    let members:GuildMember[];
     if (targetType == 'role') {
-        for (let member of (await server.members.fetch()).toJSON()) {
-            // if (member.user.bot) continue; for testing purposes
-            if (member.id == interaction.user.id) continue;
-            if (member.roles.cache.map(role => role.id).includes(target)) {
-                membCount += 1;
-                members.push(member)
-            }
-        };
+        let data = await getUsersByRole(target, [interaction.user.id], false);
+        membCount = data.memberCount;
+        members = data.members;
     } else {
         membCount = 1;
-        members.push((await server.members.fetch(target)))
+        members = [(await server.members.fetch(target))];
     };
 
     if (userBal < amount * membCount) {
@@ -76,8 +67,8 @@ export default async (args:CmdoArgs) => {
     }
 
     members.forEach(async member => {
-        if (purpose != "ramen" && purpose != 'events' && purpose != "nb" && 
-            purpose != "nitro" && purpose != "roles" && purpose !== 'noroot'
+        if (purpose != "ramen" && purpose != 'events' && purpose != "missions" && 
+            purpose != "nitro" && purpose != "roles" && purpose !== 'noroot' && purpose != 'invites'
         ) return;
 
         await updateCurrency[subCmd](member.id, purpose, amount);
@@ -86,13 +77,13 @@ export default async (args:CmdoArgs) => {
     
 
     const embed = new MessageEmbed({
-        title: `${subCmd.toUpperCase()} TRANSFER RECEIPT`,
+        title: `${emojis.money} ${subCmd.toUpperCase()} TRANSFER RECEIPT`,
         description: `**From: **<@${user.id}>\n**To: **<@${targetType == 'role' ? "&" : ""}${target}>\n**Sum Of: \`${amount*membCount} ${subCmd}\`**\n**Total Receivers: \`${membCount}\`**\n**Perhead: \`${amount} ${subCmd}\`**`,
         thumbnail: {
             url: client.user.displayAvatarURL()
         },
         footer: {
-            text: `${new Date(new Date().toString())}`
+            text: `${interaction.createdAt.toString().replace(/\([A-Z a-z]+\)/g, '')}`
         }
     });
     if (interaction.user.avatarURL()) {
