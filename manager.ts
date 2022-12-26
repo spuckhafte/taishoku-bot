@@ -4,8 +4,8 @@ import fs from 'fs';
 class CmdManager {
     ResgisteredCommands:Manager;
 
-    constructor(folder:string, ts=false) {
-        let fileType = ts ? '.ts' : '.js';
+    constructor(folder:string, lang:'ts'|'js') {
+        let fileType = '.' + lang;
         fs.readdir(folder, (_, files) => {
             files.forEach(file => {
                 if (file.endsWith(fileType)) {

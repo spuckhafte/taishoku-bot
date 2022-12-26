@@ -8,7 +8,7 @@ import intializeRamenVoteListener from './helpers/ramenVote';
 import registerAll from './helpers/registerAll';
 
 dotenv.config();
-const Commando = new CmdManager('./commands', true);
+const Commando = new CmdManager('./commands', 'ts');
 mongoose.connect(process.env.DB ?? "", (e) => console.log(e ? e : '[connected to db]'));
 const { socket, processVote } = intializeRamenVoteListener();
 
