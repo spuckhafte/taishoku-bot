@@ -1,7 +1,12 @@
 import { io } from "socket.io-client";
 import { RAMEN_ID, RAMEN_VOTING_SYSTEM_SERVER } from "../data/impVar.json"
 import Users from "../schema/User";
+import client from "../server";
 import updateDb from "./updateDb";
+
+import { votingChannel } from '../data/settings.json'
+import { rewards } from '../data/money.json'
+import assignCurrency from "./assignCurrency";
 
 export default () => {
     const socket = io(RAMEN_VOTING_SYSTEM_SERVER);
@@ -22,8 +27,10 @@ async function processVote(data:any) {
         return 0;
     }
     updateDb({ id: voterId }, 'ramen.votes', user.ramen.votes + 1);
-    return {
-        voterId,
-        votes: user.ramen.votes + 1
+    assignCurrency.fame(voterId, 'ramen', rewards.votes);
+
+    const chnl = client.channels.cache.find(chnl => chnl.id == votingChannel)
+    if (chnl?.isText()) {
+        chnl.send(`<@${voterId}> voted, assigned \`${rewards.votes}F\` to them, they've voted \`${user.ramen.votes + 1}\` times.`);
     }
 };

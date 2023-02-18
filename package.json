@@ -2,14 +2,21 @@
   "dependencies": {
     "discord.js": "^13.12.0",
     "dotenv": "^16.0.3",
+    "image-size": "^1.0.2",
     "jimp": "^0.16.2",
     "mongoose": "^6.8.0",
     "socket.io-client": "^4.5.4",
-    "ts-node": "^10.9.1",
+    "uuid": "^9.0.0",
     "wokcommands": "^2.1.0"
   },
   "scripts": {
-    "start": "ts-node server.ts",
-    "slash": "node createSlashCmd"
+    "start": "nodemon server.ts",
+    "slash": "node createSlashCmd",
+    "toolbox": "ts-node helpers/toolbox.ts"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.0",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1"
   }
 }

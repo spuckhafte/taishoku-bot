@@ -59,6 +59,14 @@ export default async (args:CmdoArgs) => {
         members = [(await server.members.fetch(target))];
     };
 
+    if (membCount == 0 || members[0].id == interaction.user.id) {
+        interaction.reply({
+            content: "**No valid users of specific role/id found!**",
+            ephemeral: true
+        })
+        return;
+    }
+
     if (userBal < amount * membCount) {
         interaction.reply({
             content: `**You do not have enough \`${subCmd}\` to spend**`

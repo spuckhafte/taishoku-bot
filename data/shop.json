@@ -1,0 +1,84 @@
+{
+    "shop": [
+        {
+            "name": "Title",
+            "desc": "Get one of the awesome roles",
+            "id": "1",
+            "price": 7000,
+            "currency": "Fame",
+            "type": "g"
+        },
+        {
+            "name": "Change Village",
+            "desc": "Get transferred to a village of your choice",
+            "id": "2",
+            "price": 24000,
+            "currency": "Fame",
+            "type": "s"
+        },
+        {
+            "name": "Personal Role",
+            "desc": "Get your personalized role",
+            "id": "3",
+            "price": 25000,
+            "currency": "Fame",
+            "type": "g"
+        },
+        {
+            "name": "Rogue Ninja",
+            "desc": "Get access to every village",
+            "id": "4",
+            "price": 30000,
+            "currency": "Fame",
+            "type": "s"
+        },
+        {
+            "name": "Personal Channel",
+            "desc": "Get a channel of your choice and customize it",
+            "id": "5",
+            "price": 35000,
+            "currency": "Fame",
+            "type": "g"
+        },
+        {
+            "name": "Prestige I",
+            "desc": "Taishoku Premium: Tier 1",
+            "id": "6",
+            "price": 100000,
+            "currency": "Fame",
+            "type": "s"
+        },
+        {
+            "name": "Prestige II",
+            "desc": "Taishoku Premium: Tier 2",
+            "id": "7",
+            "price": 150000,
+            "currency": "Fame",
+            "type": "s"
+        },
+        {
+            "name": "Prestige III",
+            "desc": "Taishoku Premium: Tier 3",
+            "id": "8",
+            "price": 200000,
+            "currency": "Fame",
+            "type": "s"
+        },
+        {
+            "name": "Prestige IV",
+            "desc": "Taishoku Premium: Tier 4",
+            "id": "9",
+            "price": 250000,
+            "currency": "Fame",
+            "type": "s"
+        },
+        {
+            "name": "Prestige V",
+            "desc": "Taishoku Premium: Tier 5",
+            "id": "10",
+            "price": 300000,
+            "currency": "Fame",
+            "type": "s"
+        }
+    ]
+}

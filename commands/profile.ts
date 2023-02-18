@@ -8,6 +8,8 @@ import { timeRange } from "../helpers/toolbox";
 import Jimp from "jimp";
 import fs from 'fs';
 
+const nitroAdrs = './assets/nitro.png';
+
 export default async (args:CmdoArgs) => {
     const interaction = args.Interaction;
     const show = interaction.options.getBoolean("show");
@@ -15,27 +17,31 @@ export default async (args:CmdoArgs) => {
     if (!user) return;
     const member = await (await client.guilds.fetch(TAISHOKU_SERVER_ID)).members.fetch(user.id);
 
-    let imageUrl:string;
+    let dpExists = member.displayAvatarURL() ? true : false;
+
+    let imageUrl:string = '';
     let nitroRole = member.roles.cache.toJSON().find(role => role.name == 'Server Booster');
     let attachement;
     let locationImg;
-    if (nitroRole) {
-        imageUrl = await imageOverlay(member.displayAvatarURL(), './assets/nitro.png', member.id);
-        attachement = new MessageAttachment(imageUrl, 'favicon.png');
-        locationImg = imageUrl
-        imageUrl = "attachment://favicon.png";
+
+    if (dpExists) {
+        if (nitroRole) {
+            imageUrl = await imageOverlay(member.displayAvatarURL(), nitroAdrs, member.id);
+            attachement = new MessageAttachment(imageUrl, 'favicon.png');
+            locationImg = imageUrl
+            imageUrl = "attachment://favicon.png";
+        }
+        else imageUrl = member.displayAvatarURL();
     }
-    else imageUrl = member.displayAvatarURL();
+
+    const hasHighestRole = user.roles?.highestRole?.id == user.roles?.currentHighestRole;
+    const nickname = member.nickname ? `\n**Nickname:** ${member.nickname}\n` : ''
 
     const embed = new MessageEmbed({
         title: `${emojis.profile} ${member?.user.username}`,
-        description: `**Username:** ${member?.user.username},
-**Nickname:** ${member.nickname}
+        description: `**Username:** ${member?.user.username},${nickname}
 **Since:** ${(new Date(user.started ?? "")).toString().replace(/GMT\+[0-9]+ \([A-Z a-z]+\)/g, '')}
-**Level:** <@&${user.roles?.currentHighestRole}>`,
-        thumbnail: {
-            url: imageUrl
-        },
+**Level:** ${user.roles?.currentHighestRole ? `<@&${user.roles?.currentHighestRole}>` : `Newbie ${emojis.newbie}`}`,
         fields: [
             {
                 name: `${emojis.earning} Balance`,
@@ -58,13 +64,20 @@ export default async (args:CmdoArgs) => {
             }, {
                 name: `${emojis.showcase} Showcase`,
                 value: `**Missions Completed:** **\`${user.missions?.missionsCompleted}\`**
-**Highest Role:** <@&${user.roles?.highestRole?.id}> ${timeRange(user.roles?.highestWhen).dayLiteral} ${user.roles?.highestRole?.id == user.roles?.currentHighestRole ? '*and counting...' : ''}*
+**Highest Role:** <@&${user.roles?.highestRole?.id}> ${timeRange(user.roles?.highestWhen, hasHighestRole ? Date.now() : user.roles?.highestTill).dayLiteral}${hasHighestRole ? ' *and counting...*' : '.'}
 **Server Boosts:** **\`${user.nitro?.boosts} times\`**
 **Nitro Earned:** **\`${user.nitro?.purchased} times\`**
 **Ramen Voted:** **\`${user.ramen?.votes} times\`**`
             }
         ]
     });
+
+    if (dpExists) {
+        embed.thumbnail = {
+            url: imageUrl
+        }
+    }
+    
     if (!attachement) {
         await interaction.reply({
             embeds: [embed],
@@ -85,12 +98,13 @@ async function imageOverlay(originalImage:string, imageOverlay:string, id:string
     originalImage = originalImage.replace('webp', 'jpg');
     let watermark = await Jimp.read(imageOverlay);
     watermark = watermark.resize(50,50); // Resizing watermark image
-    const image = await Jimp.read(originalImage);
+    let image = await Jimp.read(originalImage);
+    image = image.resize(128, 128); // Resizing actual img to a std size
     image.composite(watermark, 85, 80, {
         mode: Jimp.BLEND_SOURCE_OVER,
         opacityDest: 1,
         opacitySource: 1
-    })
+    });
     await image.writeAsync(`./assets/${id}.jpg`);
     return `./assets/${id}.jpg`;
 }

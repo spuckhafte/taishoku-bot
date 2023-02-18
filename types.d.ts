@@ -1,4 +1,4 @@
-import { CommandInteraction } from 'discord.js'
+import { CommandInteraction, ModalSubmitInteraction, SelectMenuInteraction } from 'discord.js'
 
 export type Manager = {
     [index: string]: CallableFunction
@@ -12,7 +12,33 @@ export type CmdoArgs = {
     Interaction: CommandInteraction
 }
 
+export type SelectMenuArgs = {
+    Interaction: SelectMenuInteraction
+}
+
+export type ModalArgs = {
+    Interaction: ModalSubmitInteraction
+}
+
+export type FieldsArray = {
+    name: string,
+    value: string,
+    inline: boolean
+}
+
+export type Shop = {
+    name: string;
+    desc: string;
+    id: string;
+    price: number;
+    currency: string;
+    type: string;
+}
+
 export type ExistingCmds = 'ping' | 'distribute' | 'profile';
 export type Currencies = 'fame' | 'elixir';
 
-export type Purposes = 'ramen'|'missions'|'roles'|'nitro'|'events'|'noroot'|'invites'
+export type Purposes = 'ramen'|'missions'|'roles'|'nitro'|'events'|'noroot'|'invites';
+
+export type Services = ["reminders"];
+export type Goods = ["pvtChannels"];

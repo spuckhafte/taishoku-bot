@@ -8,7 +8,11 @@ import intializeRamenVoteListener from './helpers/ramenVote';
 import registerAll from './helpers/registerAll';
 
 dotenv.config();
+
 const Commando = new CmdManager('./commands', 'ts');
+const OtherInteractions = new CmdManager('./interactions', 'ts');
+
+mongoose.set("strictQuery", false);
 mongoose.connect(process.env.DB ?? "", (e) => console.log(e ? e : '[connected to db]'));
 const { socket, processVote } = intializeRamenVoteListener();
 
@@ -24,22 +28,29 @@ const client = new Discord.Client({
 
 
 client.on('ready', async () => {
-    console.log(`Logged in as ${client.user?.username}`);
-    
-    // await User.deleteMany({});
-    // console.log('g')
-    // registerAll(client);
+    console.log(`[logged in as ${client.user?.username}]`);
+    registerAll(10);
 })
 
 client.on('interactionCreate', async Interaction => {
-    if (!Interaction.isCommand()) return;
-    
-    let cmdName = Interaction.commandName;
-    Commando.run(cmdName, { Interaction });
+    if (Interaction.isCommand()) {
+        let cmdName = Interaction.commandName;
+        Commando.run(cmdName, { Interaction });
+    }
+
+    if (Interaction.isSelectMenu()) {
+        const menuId = Interaction.customId;
+        OtherInteractions.run(menuId, { Interaction });
+    }
+
+    if (Interaction.isModalSubmit()) {
+        const modalId = Interaction.customId;
+        OtherInteractions.run(modalId, { Interaction });
+    }
 });
 
-socket.on('upvote', async data => {
-    const votingData = await processVote(data);
+socket.on('test', async data => {
+    await processVote(data);
 })
 
 client.login(process.env.TOKEN);

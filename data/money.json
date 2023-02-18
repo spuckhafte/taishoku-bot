@@ -15,7 +15,8 @@
         "tax": {
             "transfer": 5,
             "to-elixir": 25,
-            "taxFreeTransferThreshold": 10000
+            "taxFreeTransferThreshold": 10000,
+            "taxFreeTransferMin": 100
         }
     },
     "elixir": {
@@ -32,9 +33,19 @@
 
         "to-fame": 1000,
         "tax": {
-            "transfer": 6,
+            "transfer": 1,
             "to-elixir": 20,
-            "taxFreeTransferThreshold": 10
+            "taxFreeTransferThreshold": 10,
+            "taxFreeTransferMin": 2
         }
+    },
+    "rewards": {
+        "daily": 2,
+        "weekly": 10,
+        "booster": {
+            "id": "1056234988112195632",
+            "fame": 89
+        },
+        "votes": 100
     }
 }
