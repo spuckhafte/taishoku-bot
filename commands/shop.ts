@@ -5,7 +5,7 @@ import Users from "../schema/User";
 
 import { shop } from "../data/shop.json"
 import { shopping, lock } from '../data/emojis.json'
-import shopActions from "./shopActions";
+import shopActions from "../helpers/shopActions";
 
 
 const NEVER_GONNA = 'https://www.youtube.com/watch?v=xvFZjo5PgG0';

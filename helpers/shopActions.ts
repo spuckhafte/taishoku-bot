@@ -3,8 +3,8 @@ import { Shop } from "../types";
 import client from "../server";
 import { v4 } from 'uuid';
 import Users from "../schema/User";
-import assignCurrency from "../helpers/assignCurrency";
-import updateDb from "../helpers/updateDb";
+import assignCurrency from "./assignCurrency";
+import updateDb from "./updateDb";
 
 import { storeLogsChannel, rogueId, purchasingRoleId } from '../data/settings.json'
 import { money, showcase } from '../data/emojis.json';
