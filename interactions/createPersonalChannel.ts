@@ -35,8 +35,8 @@ export default async (args:ModalArgs) => {
         channelName,
         { parent: customChannelCategory }
     )
-	channel.permissionOverwrites.edit(interaction.user, channelPermissions)
-	channel.setTopic(channelTopic)
+	await channel.permissionOverwrites.edit(interaction.user, channelPermissions)
+	await channel.setTopic(channelTopic)
 
 
     const item = shop.find(item => item.name == 'Personal Channel')
