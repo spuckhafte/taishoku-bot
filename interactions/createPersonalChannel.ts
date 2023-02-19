@@ -34,12 +34,12 @@ export default async (args:ModalArgs) => {
     const channel = await interaction.guild.channels.create(
         channelName,
         { parent: customChannelCategory }
-    )
-	await channel.permissionOverwrites.edit(interaction.user, channelPermissions)
-	await channel.setTopic(channelTopic)
+    );
+	await channel.permissionOverwrites.edit(interaction.user, channelPermissions);
+	await channel.setTopic(channelTopic);
 
 
-    const item = shop.find(item => item.name == 'Personal Channel')
+    const item = shop.find(item => item.name == 'Personal Channel');
     if (!item) return;
     await assignCurrency.spend.fame(interaction.user.id, item.price, purchaseId);
 
