@@ -59,8 +59,8 @@ export default (interval:number) => {
     setInterval(() => {
         register();
     }, interval * 1000);
-    twirlTimer(`updating users in every ${interval}s`)
-    // console.log(`updating users in every ${interval}s`)
+    // twirlTimer(`updating users in every ${interval}s`)
+    console.log(`updating users in every ${interval}s`)
 }
 
 function findHigestPosition(wrt:number, list:number[], found=-1):number {
