@@ -50,7 +50,7 @@ export default async (args:CmdoArgs) => {
         return btn.user.id == interaction.user.id && msg.id == btn.message.id;
     }
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
         // @ts-ignore
         embed.footer.text = `${clock} Times up`;
         const rowNew = generateOptionButtons(mission, true, false, true);
@@ -66,7 +66,9 @@ export default async (args:CmdoArgs) => {
 
 
     collector?.on('collect', async collected => {
-        collected.deferUpdate()
+        collected.deferUpdate();
+        clearTimeout(timeout);
+
         const correct = collected.customId.includes('correct');
         if (correct) {
             await assignCurrency.fame(interaction.user.id, 'missions', rewards.mission);
