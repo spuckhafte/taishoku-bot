@@ -10,7 +10,7 @@ export default async (args:SelectMenuArgs) => {
     const member = interaction.guild?.members.cache.find(mem => mem.id == interaction.user.id);
     const currentVillage = member?.roles.cache.filter(role => Object.values(villages).includes(role.id));
 
-    if (currentVillage) member?.roles.remove(currentVillage);
+    if (currentVillage) await member?.roles.remove(currentVillage);
     await member?.roles.add(villageId);
 
     interaction.update({
