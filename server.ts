@@ -49,9 +49,10 @@ client.on('interactionCreate', async Interaction => {
     }
 });
 
-socket.on('test', async data => {
+socket.on('upvote', async data => {
+    console.log('voted!!');
     await processVote(data);
-})
+});
 
 client.login(process.env.TOKEN);
 
