@@ -35,6 +35,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
     // done: change village, rogue, title, personal role
 
     if (item.name == 'Title') {
+        interaction.deferReply({ ephemeral: true });
         const userRoles = member?.roles.cache.map(role => role.id);
         let titleList = titles.filter(title => !userRoles?.includes(title.value));
 
@@ -42,9 +43,8 @@ export default async (item:Shop, interaction:CommandInteraction) => {
             updateDb({ id: user.id }, 'inventory.goods.1.bought', true);
         }
         if (titleList.length == 0) {
-            interaction.reply({
-                content: "You already bought all the titles, awesome",
-                ephemeral: true
+            interaction.editReply({
+                content: "You already bought all the titles, awesome"
             });
             return;
         }
@@ -61,14 +61,13 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         await assignCurrency.spend.fame(user.id, item.price, purchaseId);
 
         if (logChannel?.isText()) await logChannel.send({ embeds: [embed] });
-        await interaction.reply({ 
+        await interaction.editReply({ 
             embeds: [embed], 
-            components: [row],
-            ephemeral: true
+            components: [row]
         });
 
     } else if (item.name == 'Change Village') {
-
+        interaction.deferReply({ ephemeral: true });
         await member?.roles.add(purchasingRoleId);
         await assignCurrency.spend.fame(user.id, item.price, purchaseId);
         const list = member?.roles.cache.map(role => role.id);
@@ -95,13 +94,13 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         const embed = generateReceipt(user, item, interaction, purchaseId);
 
         if (logChannel?.isText()) await logChannel.send({ embeds: [embed] });
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [embed],
-            components: [row],
-            ephemeral: true
+            components: [row]
         });
 
     } else if (item.name == 'Rogue Ninja') {
+        interaction.deferReply({ ephemeral: true })
         if (!user.inventory?.services) return;
         
         if (user.inventory?.services['4']?.bought) {
@@ -112,16 +111,15 @@ export default async (item:Shop, interaction:CommandInteraction) => {
             return;
         }
 
-        member?.roles.add(rogueId);
+        await member?.roles.add(rogueId);
         const embed = generateReceipt(user, item, interaction, purchaseId);
 
         await assignCurrency.spend.fame(user.id, item.price, purchaseId);
         await updateDb({ id: user.id }, "inventory.services.4.bought", true);
 
-        await interaction.reply({
+        await interaction.editReply({
             content: `**You are now a ROGUE NINJA ${showcase}**`,
-            embeds: [embed],
-            ephemeral: true
+            embeds: [embed]
         });
         if (logChannel?.isText()) logChannel.send({ embeds: [embed] });
     } else if (item.name == 'Personal Role') {
@@ -162,6 +160,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         modal.addComponents(row1, row2);
         await interaction.showModal(modal);
     } else if (item.name.startsWith('Prestige')) {
+        interaction.deferReply({ ephemeral: true })
         const convert = { 'I': '1', 'II': '2', 'III': '3', 'IV': '4', 'V': '5' };
         const dbRef = { 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 } // tier: item-id
         // @ts-ignore Prestige's suffix is definitely a key of convert
@@ -174,10 +173,9 @@ export default async (item:Shop, interaction:CommandInteraction) => {
 
         const embed = generateReceipt(user, item, interaction, purchaseId);
 
-        await interaction.reply({
+        await interaction.editReply({
             content: `You bought the **Tier ${tier} Prestige**, contact the admins for benefits ${showcase}`,
-            embeds: [embed],
-            ephemeral: true
+            embeds: [embed]
         });
         if (logChannel?.isText()) logChannel.send({ embeds: [embed] });
     }
