@@ -100,7 +100,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         });
 
     } else if (item.name == 'Rogue Ninja') {
-        interaction.deferReply({ ephemeral: true })
+        await interaction.deferReply({ ephemeral: true })
         if (!user.inventory?.services) return;
         
         if (user.inventory?.services['4']?.bought) {
