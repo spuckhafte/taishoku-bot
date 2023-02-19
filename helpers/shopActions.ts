@@ -35,7 +35,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
     // done: change village, rogue, title, personal role
 
     if (item.name == 'Title') {
-        interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ ephemeral: true });
         const userRoles = member?.roles.cache.map(role => role.id);
         let titleList = titles.filter(title => !userRoles?.includes(title.value));
 
@@ -67,7 +67,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         });
 
     } else if (item.name == 'Change Village') {
-        interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ ephemeral: true });
         await member?.roles.add(purchasingRoleId);
         await assignCurrency.spend.fame(user.id, item.price, purchaseId);
         const list = member?.roles.cache.map(role => role.id);
@@ -159,7 +159,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         modal.addComponents(row1, row2);
         await interaction.showModal(modal);
     } else if (item.name.startsWith('Prestige')) {
-        interaction.deferReply({ ephemeral: true })
+        await interaction.deferReply({ ephemeral: true })
         const convert = { 'I': '1', 'II': '2', 'III': '3', 'IV': '4', 'V': '5' };
         const dbRef = { 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 } // tier: item-id
         // @ts-ignore Prestige's suffix is definitely a key of convert
@@ -168,6 +168,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
 
         // @ts-ignore dbRef[convert[tier]] is defenetily an id
         await updateDb({ id: user.id }, `inventory.services.${dbRef[convert[tier]]}.bought`, true);
+        await assignCurrency.spend.fame(user.id, item.price, purchaseId);
         await member?.roles.add(roleId);
 
         const embed = generateReceipt(user, item, interaction, purchaseId);

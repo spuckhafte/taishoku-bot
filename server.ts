@@ -49,7 +49,7 @@ client.on('interactionCreate', async Interaction => {
     }
 });
 
-socket.on('upvote', async data => {
+socket.on('test', async data => {
     await processVote(data);
 })
 
