@@ -15,8 +15,6 @@ export default async (args:CmdoArgs) => {
     const discordUser = interaction.user;
     const user = await Users.findOne({ id: discordUser.id });
 
-    // const userInventoryPrestige = user?.inventory?.services
-
     const subCmd = interaction.options.getSubcommand();
     const itemId = interaction.options.getNumber('item', false);
 
@@ -46,7 +44,10 @@ export default async (args:CmdoArgs) => {
         const item = shop.find(shopItem => +shopItem.id == itemId);
 
         if (!item) {
-            // embed
+            interaction.reply({
+                content: "No item of this id exists in store",
+                ephemeral: true
+            })
             return;
         }
 
@@ -59,7 +60,7 @@ function generateField(shopItem:Shop, user:any) {
     const userServices = user.inventory.services
     const userGoods = user.inventory.goods
     const prestigeIds = [6, 7, 8, 9, 10];
-    let prestige = 0; // what prestige to show in list
+    let prestige = 0; // tier of the prestige to be shown in the list
 
     if (prestigeIds.includes(+shopItem.id)) {
         for (let id of prestigeIds) {

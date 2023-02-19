@@ -64,7 +64,6 @@ export default async (args:CmdoArgs) => {
             }, {
                 name: `${emojis.showcase} Showcase`,
                 value: `**Missions Completed:** **\`${user.missions?.missionsCompleted}\`**
-**Highest Role:** <@&${user.roles?.highestRole?.id}> ${timeRange(user.roles?.highestWhen, hasHighestRole ? Date.now() : user.roles?.highestTill).dayLiteral}${hasHighestRole ? ' *and counting...*' : '.'}
 **Server Boosts:** **\`${user.nitro?.boosts} times\`**
 **Nitro Earned:** **\`${user.nitro?.purchased} times\`**
 **Ramen Voted:** **\`${user.ramen?.votes} times\`**`

@@ -7,7 +7,7 @@ import { levelRoleIndicator, entryRole } from '../data/settings.json'
 async function register():Promise<void> {
     const server = await client.guilds.fetch(impVar.TAISHOKU_SERVER_ID);
     (await server.members.fetch()).forEach(async member => {
-        if (member.user.bot) return; //for testing purposes
+        if (member.user.bot) return;
         if (!member.roles.cache.find(role => role.id == levelRoleIndicator)) {
             await member.roles.add(levelRoleIndicator);
             await member.roles.add(entryRole);
@@ -59,8 +59,8 @@ export default (interval:number) => {
     setInterval(() => {
         register();
     }, interval * 1000);
-    // twirlTimer(`updating users in every ${interval}s`)
-    console.log(`updating users in every ${interval}s`)
+    twirlTimer(`updating users in every ${interval}s`)
+    // console.log(`updating users in every ${interval}s`)
 }
 
 function findHigestPosition(wrt:number, list:number[], found=-1):number {

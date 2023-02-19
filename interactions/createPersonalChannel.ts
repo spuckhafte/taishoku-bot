@@ -2,44 +2,51 @@ import assignCurrency from "../helpers/assignCurrency";
 import { ModalArgs } from "../types";
 import updateDb from "../helpers/updateDb";
 import Users from "../schema/User";
-import { MessageEmbed } from "discord.js";
+import { Formatters, MessageEmbed } from "discord.js";
 import client from "../server";
 import { v4 } from "uuid";
 
 import { shop } from "../data/shop.json";
 import { money } from '../data/emojis.json';
-import { storeLogsChannel } from '../data/settings.json'
+import { storeLogsChannel, channelPermissions, customChannelCategory } from '../data/settings.json'
 
 
 export default async (args:ModalArgs) => {
     const interaction = args.Interaction;
+    if (!interaction.guild) return;
+    await interaction.deferReply({ ephemeral: true });
+
     const member = (await interaction.guild?.members.fetch())
                         ?.find(user => user.id == interaction.user.id);
-    const roleName = interaction.fields.getTextInputValue('roleName');
+    const channelName = interaction.fields.getTextInputValue('channelName');
+    const channelTopic = interaction.fields.getTextInputValue('channelTopic');
     const purchaseId = v4();
+
+    if (!member) return;
     
-    if (!roleName) {
-        interaction.reply({
-            content: "Invalid name, try again",
-            ephemeral: true
+    if (!channelName || !channelTopic) {
+        interaction.editReply({
+            content: "Invalid details, try again"
         });
         return;
     }
-    const role = await interaction.guild?.roles.create({
-        name: roleName,
-        color: 'RANDOM'
-    });
-    if (!role) return;
-    member?.roles.add(role.id);
 
-    const item = shop.find(item => item.name == 'Personal Role')
+    const channel = await interaction.guild.channels.create(
+        channelName,
+        { parent: customChannelCategory }
+    )
+	channel.permissionOverwrites.edit(interaction.user, channelPermissions)
+	channel.setTopic(channelTopic)
+
+
+    const item = shop.find(item => item.name == 'Personal Channel')
     if (!item) return;
     await assignCurrency.spend.fame(interaction.user.id, item.price, purchaseId);
 
     const user = await Users.findOne({ id: interaction.user.id });
     if (!user) return;
-    let prev = user.inventory?.goods?.[3]?.total
-    await updateDb({ id: user.id }, 'inventory.goods.3.total', (prev ? prev : 0) + 1);
+    let prev = user.inventory?.goods?.[5]?.total
+    await updateDb({ id: user.id }, 'inventory.goods.5.total', (prev ? prev : 0) + 1);
 
     const embed = new MessageEmbed({
         title: `${money} PURCHASE RECEIPT`,
@@ -50,9 +57,9 @@ export default async (args:ModalArgs) => {
             iconURL: interaction.user.displayAvatarURL()
         }
     });
-    await interaction.reply({ 
+    await interaction.editReply({ 
         embeds: [embed],
-        ephemeral: true
+        content: `<@${user.id}>, here is your personal channel: ${Formatters.channelMention(channel.id)}`
     });
 
     const logChannel = client.channels.cache.find(ch => ch.id == storeLogsChannel);

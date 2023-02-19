@@ -1,0 +1,42 @@
+[
+    {
+        "question":"What is the name of the server",
+        "options":["Ramen Official", "Testshoku", "Taishoku"],
+        "correct": 2
+    },
+    {
+        "question":"In what channel does one do challenges for taishoku event?",
+        "options":["Event Challenges","General ","Challenges"],
+        "correct": 0
+    },
+    {
+        "question":"In what channel does one do non event related challenges?",
+        "options":["Challenges ","Event Challenges","General"],
+        "correct": 0
+    },
+    {
+        "question":"What is the theme of the server?",
+        "options":["Demon slayer","Naruto","Bleach"],
+        "correct": 1
+    },
+    {
+        "question":"What is general used for?",
+        "options":["Chatting","Bots","Spam"],
+        "correct": 0
+    },
+    {
+        "question":"How do you spend fame?",
+        "options":["/balance","/mission","/shop"],
+        "correct": 2
+    },
+    {
+        "question":" What is Taishoku premium?",
+        "options":["Scam", "A way to spend fame on nitro or nb premium", "Nothing"],
+        "correct": 1
+    },
+    {
+        "question": "How does someone spend fame on emojis?",
+        "options":["Dm Puffy or Zero","/shop","You Can't"],
+        "correct": 0
+    }
+]

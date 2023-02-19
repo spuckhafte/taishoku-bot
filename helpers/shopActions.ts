@@ -1,5 +1,5 @@
 import { CommandInteraction, Message, MessageActionRow, MessageEmbed, MessageSelectMenu, Modal, SelectMenuInteraction, TextInputComponent } from "discord.js";
-import { Shop } from "../types";
+import { Shop, Tiers } from "../types";
 import client from "../server";
 import { v4 } from 'uuid';
 import Users from "../schema/User";
@@ -10,6 +10,7 @@ import { storeLogsChannel, rogueId, purchasingRoleId } from '../data/settings.js
 import { money, showcase } from '../data/emojis.json';
 import villages from '../data/villages.json';
 import titles from '../data/titles.json';
+import prestigeRoles from '../data/prestigeRoles.json';
 
 export default async (item:Shop, interaction:CommandInteraction) => {
     if (!interaction.member) return;
@@ -27,12 +28,11 @@ export default async (item:Shop, interaction:CommandInteraction) => {
     }
 
     const logChannel = client.channels.cache.find(ch => ch.id == storeLogsChannel);
-    // const reqChannel = client.channels.cache.find(ch => ch.id == storeReqChannel);
     const member = (await interaction.guild?.members.fetch())
                                 ?.find(user => user.id == interaction.user.id);
     const purchaseId = v4();
 
-    // done: change village, rogue, title
+    // done: change village, rogue, title, personal role
 
     if (item.name == 'Title') {
         const userRoles = member?.roles.cache.map(role => role.id);
@@ -54,12 +54,11 @@ export default async (item:Shop, interaction:CommandInteraction) => {
 				new MessageSelectMenu()
 					.setCustomId('title')
 					.setPlaceholder('If you loose this msg, contact admins')
-                    // @ts-ignore
 					.addOptions(titleList)
 		    );
         const embed = generateReceipt(user, item, interaction, purchaseId);
 
-        await assignCurrency.spend.fame(user.id, item.price);
+        await assignCurrency.spend.fame(user.id, item.price, purchaseId);
 
         if (logChannel?.isText()) await logChannel.send({ embeds: [embed] });
         await interaction.reply({ 
@@ -71,7 +70,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
     } else if (item.name == 'Change Village') {
 
         await member?.roles.add(purchasingRoleId);
-        await assignCurrency.spend.fame(user.id, item.price);
+        await assignCurrency.spend.fame(user.id, item.price, purchaseId);
         const list = member?.roles.cache.map(role => role.id);
 
         const villagesList = Object.keys(villages).map((vill, i) => {
@@ -116,7 +115,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         member?.roles.add(rogueId);
         const embed = generateReceipt(user, item, interaction, purchaseId);
 
-        await assignCurrency.spend.fame(user.id, item.price);
+        await assignCurrency.spend.fame(user.id, item.price, purchaseId);
         await updateDb({ id: user.id }, "inventory.services.4.bought", true);
 
         await interaction.reply({
@@ -140,6 +139,47 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         
         modal.addComponents(row);
         await interaction.showModal(modal);
+    } else if (item.name == 'Personal Channel') {
+        const modal = new Modal()
+            .setCustomId("createPersonalChannel")
+            .setTitle("Personal Channel")
+
+        const row1 = new MessageActionRow<TextInputComponent>()
+            .addComponents(
+                new TextInputComponent()
+                    .setCustomId('channelName')
+                    .setLabel('A sweet name for your channel')
+                    .setStyle('SHORT')
+            );
+        const row2 = new MessageActionRow<TextInputComponent>()
+            .addComponents(
+                new TextInputComponent()
+                    .setCustomId('channelTopic')
+                    .setLabel('A breathtaking topic for your channel')
+                    .setStyle('PARAGRAPH')
+            );
+        
+        modal.addComponents(row1, row2);
+        await interaction.showModal(modal);
+    } else if (item.name.startsWith('Prestige')) {
+        const convert = { 'I': '1', 'II': '2', 'III': '3', 'IV': '4', 'V': '5' };
+        const dbRef = { 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 } // tier: item-id
+        // @ts-ignore Prestige's suffix is definitely a key of convert
+        const tier:Tiers = item.name.split('Prestige')[1].trim();
+        const roleId = prestigeRoles[`Prestige ${tier}`];
+
+        // @ts-ignore dbRef[convert[tier]] is defenetily an id
+        await updateDb({ id: user.id }, `inventory.services.${dbRef[convert[tier]]}.bought`, true);
+        await member?.roles.add(roleId);
+
+        const embed = generateReceipt(user, item, interaction, purchaseId);
+
+        await interaction.reply({
+            content: `You bought the **Tier ${tier} Prestige**, contact the admins for benefits ${showcase}`,
+            embeds: [embed],
+            ephemeral: true
+        });
+        if (logChannel?.isText()) logChannel.send({ embeds: [embed] });
     }
 }
 

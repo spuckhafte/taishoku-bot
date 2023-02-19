@@ -42,3 +42,5 @@ export type Purposes = 'ramen'|'missions'|'roles'|'nitro'|'events'|'noroot'|'inv
 
 export type Services = ["reminders"];
 export type Goods = ["pvtChannels"];
+
+export type Tiers = 'I' | 'II' | 'III' | 'IV' | 'V';

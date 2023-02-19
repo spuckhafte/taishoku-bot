@@ -8,5 +8,14 @@
     "purchasingRoleId": "1076371061567922237",
     "rogueId": "1056234988015726618",
     "levelRoleIndicator": "1056234988112195629",
-    "entryRole": "1056234988053471397"
+    "entryRole": "1056234988053471397",
+    
+    "channelPermissions": {
+        "SEND_MESSAGES": true,
+        "EMBED_LINKS": true,
+        "ATTACH_FILES": true,
+        "VIEW_CHANNEL": true
+    },
+    "customChannelCategory": "1056234991463444509",
+    "missionTiming": 20
 }

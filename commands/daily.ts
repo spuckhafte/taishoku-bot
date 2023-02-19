@@ -22,7 +22,8 @@ export default async (args:CmdoArgs) => {
     const user = await Users.findOne({ id: discordUser.id });
 
     const userRoles = member?.roles.cache.map(role => role.id);
-    let benefit = 0;
+    let benefitRole = 0;
+    let benefitNitro = 0;
     let nitroDone = false;
     let defaultDone = false
 
@@ -34,12 +35,12 @@ export default async (args:CmdoArgs) => {
         let roleBenefit = Object.values(roleBenifits)[+roleId_i];
 
         if (userRoles.includes(impRoleId) && !defaultDone) {
-            benefit += roleBenefit;
+            benefitRole += roleBenefit;
             defaultDone = true;
         }
 
         if (userRoles.includes(rewards.booster.id) && !nitroDone) {
-            benefit += rewards.booster.fame;
+            benefitNitro += rewards.booster.fame;
             nitroDone = true;
         }
     }
@@ -58,11 +59,12 @@ export default async (args:CmdoArgs) => {
 
     if (deltaTime > timings.daily * 1000) {
         await assignCurrency.fame(user.id, 'missions', rewards.daily);
-        assignCurrency.fame(user.id, 'roles', benefit);
+        await assignCurrency.fame(user.id, 'roles', benefitRole);
+        await assignCurrency.fame(user.id, 'nitro', benefitNitro);
 
         const embed = new MessageEmbed({
             title: `${earning} DAILY REWARD`,
-            description: `**Default:** \`${rewards.daily}F\`\n**Benifit:** \`${benefit}F\``,
+            description: `**Default Reward:** \`${rewards.daily}F\`\n**Role Benefit:** \`${benefitRole}F\`\n**Nitro Benefit:** \`${benefitNitro}F\``,
             thumbnail: {
                 url: client.user?.displayAvatarURL()
             },

@@ -45,6 +45,10 @@ const usersSchema = new mongoose.Schema({
             type: Number,
             default: 0
         },
+        lastMission: {
+            type: String,
+            default: 0
+        }
     },
 
     roles: {
@@ -255,7 +259,9 @@ const usersSchema = new mongoose.Schema({
             type: String,
             default: 0
         }
-    }
+    },
+
+    purchaseHistory: [{ type: String, default: [] }]
 });
 
 const Users = mongoose.model("users", usersSchema);

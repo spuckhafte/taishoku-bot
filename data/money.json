@@ -15,7 +15,7 @@
         "tax": {
             "transfer": 5,
             "to-elixir": 25,
-            "taxFreeTransferThreshold": 10000,
+            "taxFreeTransferThreshold": 10000000,
             "taxFreeTransferMin": 100
         }
     },
@@ -35,7 +35,7 @@
         "tax": {
             "transfer": 1,
             "to-elixir": 20,
-            "taxFreeTransferThreshold": 10,
+            "taxFreeTransferThreshold": 10000000,
             "taxFreeTransferMin": 2
         }
     },
@@ -46,6 +46,7 @@
             "id": "1056234988112195632",
             "fame": 89
         },
-        "votes": 100
+        "votes": 100,
+        "mission": 20
     }
 }
