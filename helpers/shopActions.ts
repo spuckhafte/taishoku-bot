@@ -104,9 +104,8 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         if (!user.inventory?.services) return;
         
         if (user.inventory?.services['4']?.bought) {
-            await interaction.reply({
-                content: "You are already a Rogue Ninja",
-                ephemeral: true
+            await interaction.editReply({
+                content: "You are already a Rogue Ninja"
             })
             return;
         }
