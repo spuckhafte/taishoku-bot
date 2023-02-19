@@ -11,7 +11,7 @@ export default async (args:SelectMenuArgs) => {
     const currentVillage = member?.roles.cache.filter(role => Object.values(villages).includes(role.id));
 
     if (currentVillage) member?.roles.remove(currentVillage);
-    member?.roles.add(villageId);
+    await member?.roles.add(villageId);
 
     interaction.update({
         content: `**Village Transfer Successful ${showcase}**`,
