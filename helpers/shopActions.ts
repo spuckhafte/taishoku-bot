@@ -5,9 +5,10 @@ import { v4 } from 'uuid';
 import Users from "../schema/User";
 import assignCurrency from "./assignCurrency";
 import updateDb from "./updateDb";
+import { generateReceipt } from "./toolbox";
 
-import { storeLogsChannel, rogueId, purchasingRoleId } from '../data/settings.json'
-import { money, showcase } from '../data/emojis.json';
+import { storeLogsChannel, rogueId } from '../data/settings.json'
+import { showcase } from '../data/emojis.json';
 import villages from '../data/villages.json';
 import titles from '../data/titles.json';
 import prestigeRoles from '../data/prestigeRoles.json';
@@ -68,7 +69,6 @@ export default async (item:Shop, interaction:CommandInteraction) => {
 
     } else if (item.name == 'Change Village') {
         await interaction.deferReply({ ephemeral: true });
-        await member?.roles.add(purchasingRoleId);
         await assignCurrency.spend.fame(user.id, item.price, purchaseId);
         const list = member?.roles.cache.map(role => role.id);
 
@@ -179,16 +179,4 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         });
         if (logChannel?.isText()) logChannel.send({ embeds: [embed] });
     }
-}
-
-function generateReceipt(user:any, item:Shop, interaction:CommandInteraction, purchaseId:string) {
-    return new MessageEmbed({
-        title: `${money} PURCHASE RECEIPT`,
-        thumbnail: { url: client.user?.displayAvatarURL() },
-        description: `**Customer:** <@${user.id}>\n**Amount:** \`${item.price}F\`\n**Item:** ${item.name}\n**Purchase Id:** \`${purchaseId}\``,
-        footer: {
-            text: `${interaction.createdAt.toString().replace(/\([A-Z a-z]+\)/g, '')}`,
-            iconURL: interaction.user.displayAvatarURL()
-        }
-    });
 }

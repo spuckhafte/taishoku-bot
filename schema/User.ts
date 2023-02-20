@@ -52,10 +52,6 @@ const usersSchema = new mongoose.Schema({
     },
 
     roles: {
-        currentHighestRole: String, // id
-        highestWhen: String,
-        highestTill: String,
-
         fameCollected: {
             type: Number,
             default: 0
@@ -64,11 +60,6 @@ const usersSchema = new mongoose.Schema({
             type: Number,
             default: 0
         },
-
-        highestRole: {
-            position: Number,
-            id: String
-        }
     },
 
     nitro: {
@@ -259,6 +250,11 @@ const usersSchema = new mongoose.Schema({
             type: String,
             default: 0
         }
+    },
+
+    sendCooldown: {
+        type: String,
+        default: '0'
     },
 
     purchaseHistory: [{ type: String, default: [] }]

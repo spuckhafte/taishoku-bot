@@ -1,14 +1,11 @@
 {
-    "dailyPvt": false,
-    "votingChannel": "1056234989475340390",
-    "storeLogsChannel": "1076370604132941955",
-    "storeReqChannel": "1076370651214004274",
-    "talkToModChannel": "1076371015220858910",
-    "adminId": "1056234988258996326",
-    "purchasingRoleId": "1076371061567922237",
-    "rogueId": "1056234988015726618",
-    "levelRoleIndicator": "1056234988112195629",
-    "entryRole": "1056234988053471397",
+    "votingChannel": "1038812315988013076",
+    "storeLogsChannel": "1077090442723733514",
+    "adminId": "995698004067631235",
+    "rogueId": "1030110703157252157",
+    "distributeLogs": "1077092978113400875",
+    "puffyId": "987669538764095549",
+    "puffyTaxLog": "1077090641953173504",
     
     "channelPermissions": {
         "SEND_MESSAGES": true,
@@ -16,6 +13,7 @@
         "ATTACH_FILES": true,
         "VIEW_CHANNEL": true
     },
-    "customChannelCategory": "1056234991463444509",
-    "missionTiming": 20
+    "customChannelCategory": "1032402133003280454",
+    "missionTiming": 20,
+    "sendMoneyCd": 300
 }

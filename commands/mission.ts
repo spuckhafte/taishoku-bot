@@ -22,7 +22,7 @@ export default async (args:CmdoArgs) => {
     
     let last = user.missions?.lastMission ? user.missions?.lastMission : 0;
 
-    if (timeGap.mission * 1000 > (+Date.now() - +last)) {
+    if (timeGap.mission * 1000 < (+Date.now() - +last)) {
         interaction.reply({
             content: `Wait for \`${(120 - timeRange(`${last}`, Date.now()).minutes).toFixed(2)}\` minutes`,
             ephemeral: true
@@ -70,6 +70,8 @@ export default async (args:CmdoArgs) => {
         clearTimeout(timeout);
 
         const correct = collected.customId.includes('correct');
+        const optionSelected = +collected.customId.replace(/correct|wrong/g, '');
+
         if (correct) {
             await assignCurrency.fame(interaction.user.id, 'missions', rewards.mission);
             // @ts-ignore
@@ -80,20 +82,20 @@ export default async (args:CmdoArgs) => {
             // @ts-ignore
             embed.footer?.text = `${wrong} Incorrect`
         }
-        const rowNew = generateOptionButtons(mission, true, correct);
+        const rowNew = generateOptionButtons(mission, true, correct, false, optionSelected);
         interaction.editReply({ embeds: [embed], components: [rowNew] });
     })
 }
 
-function generateOptionButtons(mission:any, disabled=false, won=false, timeout=false) {
+function generateOptionButtons(mission:any, disabled=false, won=false, timeout=false, choice=mission.correct) {
     const row = new MessageActionRow();
     for (let opt_i in mission.options) {
         row.addComponents(
             new MessageButton()
-                .setCustomId(+opt_i == mission.correct ? 'correct' : `wrong${opt_i}`)
+                .setCustomId(+opt_i == mission.correct ? `correct${opt_i}` : `wrong${opt_i}`)
                 // @ts-ignore +opt_i + 1 is defenitely 1 or 2 or 3
                 .setEmoji(emojiOpts[+opt_i + 1])
-                .setStyle(disabled && !timeout ? (+opt_i == mission.correct ? (won ? 'SUCCESS' : 'DANGER') : 'SECONDARY') : 'SECONDARY')
+                .setStyle(disabled && !timeout ? (+opt_i == choice ? (won ? 'SUCCESS' : 'DANGER') : 'SECONDARY') : 'SECONDARY')
                 .setDisabled(disabled)
         )
     }

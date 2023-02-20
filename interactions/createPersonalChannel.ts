@@ -9,6 +9,7 @@ import { v4 } from "uuid";
 import { shop } from "../data/shop.json";
 import { money } from '../data/emojis.json';
 import { storeLogsChannel, channelPermissions, customChannelCategory } from '../data/settings.json'
+import { generateReceipt } from "../helpers/toolbox";
 
 
 export default async (args:ModalArgs) => {
@@ -48,15 +49,7 @@ export default async (args:ModalArgs) => {
     let prev = user.inventory?.goods?.[5]?.total
     await updateDb({ id: user.id }, 'inventory.goods.5.total', (prev ? prev : 0) + 1);
 
-    const embed = new MessageEmbed({
-        title: `${money} PURCHASE RECEIPT`,
-        thumbnail: { url: client.user?.displayAvatarURL() },
-        description: `**Customer:** <@${user.id}>\n**Amount:** \`${item.price}F\`\n**Item:** ${item.name}\n**Purchase Id:** \`${purchaseId}\``,
-        footer: {
-            text: `${interaction.createdAt.toString().replace(/\([A-Z a-z]+\)/g, '')}`,
-            iconURL: interaction.user.displayAvatarURL()
-        }
-    });
+    const embed = generateReceipt(user, item, interaction, purchaseId);
     await interaction.editReply({ 
         embeds: [embed],
         content: `<@${user.id}>, here is your personal channel: ${Formatters.channelMention(channel.id)}`

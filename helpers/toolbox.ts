@@ -1,8 +1,9 @@
 import client from "../server";
 import { TAISHOKU_SERVER_ID } from '../data/impVar.json'
-import { ColorResolvable, EmbedField, GuildMember, MessageEmbed, MessageEmbedFooter } from "discord.js";
+import { ColorResolvable, CommandInteraction, EmbedField, GuildMember, MessageEmbed, MessageEmbedFooter, ModalSubmitInteraction } from "discord.js";
 import Users from "../schema/User";
-import { FieldsArray, StdObject } from "../types";
+import { FieldsArray, Shop, StdObject } from "../types";
+import { money } from '../data/emojis.json';
 
 const regx = {
     title: /<title>[a-zA-Z0-9*/\\&^$#@!:"'.#_{}()[\]\-, ]+<\/title>/g,
@@ -75,7 +76,17 @@ export function timeRange(from:string|undefined, till:string|number|undefined=Da
     }
 }
 
-
+export function generateReceipt(user:any, item:Shop, interaction:CommandInteraction|ModalSubmitInteraction, purchaseId:string) {
+    return new MessageEmbed({
+        title: `${money} PURCHASE RECEIPT`,
+        thumbnail: { url: client.user?.displayAvatarURL() },
+        description: `**Customer:** <@${user.id}>\n**Amount:** \`${item.price}F\`\n**Item:** ${item.name}\n**Purchase Id:** \`${purchaseId}\``,
+        footer: {
+            text: `${interaction.createdAt.toString().replace(/\([A-Z a-z]+\)/g, '')}`,
+            iconURL: interaction.user.displayAvatarURL()
+        }
+    });
+}
 
 
 

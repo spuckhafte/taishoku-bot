@@ -1,49 +1,25 @@
 {
     "fame": {
-        "ramen": 5,
-        "boost": 200,
-        "nb": 0.3,
-        
-        "events": {
-            
-        },
-        "roles": {
-
-        },
-
-        "to-elixir": 0.001,
         "tax": {
             "transfer": 5,
-            "to-elixir": 25,
-            "taxFreeTransferThreshold": 10000000,
-            "taxFreeTransferMin": 100
+            "to-elixir": 5,
+            "noTaxTransferLim": 100,
+            "noCooldownTaxFameAmt": 5
         }
     },
     "elixir": {
-        "ramen": 0.0015,
-        "boost": 1.5,
-        "nb": 0.0001,
-
-        "events": {
-            
-        },
-        "roles": {
-
-        },
-
-        "to-fame": 1000,
         "tax": {
             "transfer": 1,
-            "to-elixir": 20,
-            "taxFreeTransferThreshold": 10000000,
-            "taxFreeTransferMin": 2
+            "to-elixir": 3,
+            "noTaxTransferLim": 2,
+            "noCooldownTaxElixirAmt": 1
         }
     },
     "rewards": {
         "daily": 2,
         "weekly": 10,
         "booster": {
-            "id": "1056234988112195632",
+            "id": "994430535470424074",
             "fame": 89
         },
         "votes": 100,

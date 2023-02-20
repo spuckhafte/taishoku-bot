@@ -33,6 +33,7 @@ client.on('ready', async () => {
 })
 
 client.on('interactionCreate', async Interaction => {
+    // if (Interaction.channel) if (Interaction.channel.id != '1077088818047483924') return;
     if (Interaction.isCommand()) {
         let cmdName = Interaction.commandName;
         Commando.run(cmdName, { Interaction });
@@ -50,7 +51,6 @@ client.on('interactionCreate', async Interaction => {
 });
 
 socket.on('upvote', async data => {
-    console.log('voted!!');
     await processVote(data);
 });
 

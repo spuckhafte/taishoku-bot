@@ -55,7 +55,7 @@ export default async (args:CmdoArgs) => {
         return;
     }
 
-    const deltaTime = Date.now() - +user.reminder.daily*1000
+    const deltaTime = Date.now() - +user.reminder.daily;
 
     if (deltaTime > timings.daily * 1000) {
         await assignCurrency.fame(user.id, 'missions', rewards.daily);
@@ -76,7 +76,7 @@ export default async (args:CmdoArgs) => {
 
         await interaction.reply({
             embeds: [embed],
-            ephemeral: settings.dailyPvt
+            ephemeral: true
         });
         updateDb({ id: user.id }, 'reminder.daily', Date.now());
 

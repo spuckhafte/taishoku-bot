@@ -4,7 +4,6 @@ import client from "../server";
 import { CmdoArgs } from "../types";
 import emojis from '../data/emojis.json';
 import { TAISHOKU_SERVER_ID } from '../data/impVar.json'
-import { timeRange } from "../helpers/toolbox";
 import Jimp from "jimp";
 import fs from 'fs';
 
@@ -34,32 +33,30 @@ export default async (args:CmdoArgs) => {
         else imageUrl = member.displayAvatarURL();
     }
 
-    const hasHighestRole = user.roles?.highestRole?.id == user.roles?.currentHighestRole;
     const nickname = member.nickname ? `\n**Nickname:** ${member.nickname}\n` : ''
 
     const embed = new MessageEmbed({
         title: `${emojis.profile} ${member?.user.username}`,
         description: `**Username:** ${member?.user.username},${nickname}
-**Since:** ${(new Date(user.started ?? "")).toString().replace(/GMT\+[0-9]+ \([A-Z a-z]+\)/g, '')}
-**Level:** ${user.roles?.currentHighestRole ? `<@&${user.roles?.currentHighestRole}>` : `Newbie ${emojis.newbie}`}`,
+**Since:** ${(new Date(user.started ?? "")).toString().replace(/GMT\+[0-9]+ \([A-Z a-z]+\)/g, '')}`,
         fields: [
             {
                 name: `${emojis.earning} Balance`,
-                value: `**Fame:** **\`${user.totalFame}\`**
-**Elixir:** **\`${user.totalElixir}\`**`,
+                value: `**Fame:** **\`${user.totalFame.toFixed(2)}\`**
+**Elixir:** **\`${user.totalElixir.toFixed(2)}\`**`,
                 inline: false,
             }, {
                 name: `${emojis.money} Earnings`,
-                value: `**Missions:** **\`${user.missions?.fameCollected}F\`  \`${user.missions?.elixirCollected}E\`**
-**Roles:** **\`${user.roles?.fameCollected}F\`  \`${user.roles?.elixirCollected}E\`**
-**Events:** **\`${user.events?.fameCollected}F\`  \`${user.events?.elixirCollected}E\`**
-**Nitro:** **\`${user.nitro?.fameCollected}F\`  \`${user.nitro?.elixirCollected}E\`**
-**Ramen:** **\`${user.ramen?.fameCollected}F\`  \`${user.ramen?.elixirCollected}E\`**
-**NoRoot:** **\`${user.noroot?.fameCollected}F\`  \`${user.noroot?.elixirCollected}E\`**`,
+                value: `**Missions:** **\`${user.missions?.fameCollected.toFixed(2)}F\`  \`${user.missions?.elixirCollected.toFixed(2)}E\`**
+**Roles:** **\`${user.roles?.fameCollected.toFixed(2)}F\`  \`${user.roles?.elixirCollected.toFixed(2)}E\`**
+**Events:** **\`${user.events?.fameCollected.toFixed(2)}F\`  \`${user.events?.elixirCollected.toFixed(2)}E\`**
+**Nitro:** **\`${user.nitro?.fameCollected.toFixed(2)}F\`  \`${user.nitro?.elixirCollected.toFixed(2)}E\`**
+**Ramen:** **\`${user.ramen?.fameCollected.toFixed(2)}F\`  \`${user.ramen?.elixirCollected.toFixed(2)}E\`**
+**NoRoot:** **\`${user.noroot?.fameCollected.toFixed(2)}F\`  \`${user.noroot?.elixirCollected.toFixed(2)}E\`**`,
                 inline: true
             }, {
                 name: `${emojis.spending} Spendings`,
-                value: `**Fame:** **\`${user.spent?.fameCollected}\`**\n**Elixir:** **\`${user.spent?.elixirCollected}\`**`,
+                value: `**Fame:** **\`${user.spent?.fameCollected.toFixed(2)}\`**\n**Elixir:** **\`${user.spent?.elixirCollected.toFixed(2)}\`**`,
                 inline: true
             }, {
                 name: `${emojis.showcase} Showcase`,
