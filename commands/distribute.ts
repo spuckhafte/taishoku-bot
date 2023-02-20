@@ -7,6 +7,7 @@ import { TAISHOKU_SERVER_ID } from '../data/impVar.json'
 import { getUsersByRole, isUserOrRole } from '../helpers/toolbox'
 import emojis from '../data/emojis.json';
 import { distributeLogs, adminId } from '../data/settings.json';
+import Users from "../schema/User";
 
 const schemaKeys:string[] = ["ramen", "events", "missions", "nitro", "roles", "invites"];
 
@@ -18,13 +19,14 @@ export default async (args:CmdoArgs) => {
     let purpose = interaction.options.getString('purpose');
 
     const server = await client.guilds.fetch(TAISHOKU_SERVER_ID);
+
+    await interaction.deferReply()
     
     const allAdmins = await getUsersByRole(adminId);
     let adminIds = allAdmins.members.map(mem => mem.id);
     if (!adminIds.includes(interaction.user.id)) {
-        await interaction.reply({
-            content: "Only admins can access this command",
-            ephemeral: true
+        await interaction.editReply({
+            content: "Only admins can access this command"
         });
         return;
     }
@@ -35,9 +37,8 @@ export default async (args:CmdoArgs) => {
     if (!schemaKeys.includes(purpose ? purpose : '')) purpose = 'noroot';
 
     if (amount <= 0) {
-        await interaction.reply({
-            content: `**Invalid Amount**`,
-            ephemeral: true
+        await interaction.editReply({
+            content: `**Invalid Amount**`
         });
         return;
     }
@@ -47,7 +48,7 @@ export default async (args:CmdoArgs) => {
     let membCount:number;
     let members:GuildMember[];
     if (targetType == 'role') {
-        let data = await getUsersByRole(target, [interaction.user.id], false);
+        let data = await getUsersByRole(target, [interaction.user.id]);
         membCount = data.memberCount;
         members = data.members;
     } else {
@@ -56,9 +57,8 @@ export default async (args:CmdoArgs) => {
     };
 
     if (membCount == 0 || members[0].id == interaction.user.id) {
-        await interaction.reply({
-            content: "**No valid users of specific role/id found!**",
-            ephemeral: true
+        await interaction.editReply({
+            content: "**No valid users of specific role/id found!**"
         })
         return;
     }
@@ -67,6 +67,8 @@ export default async (args:CmdoArgs) => {
         if (purpose != "ramen" && purpose != 'events' && purpose != "missions" && 
             purpose != "nitro" && purpose != "roles" && purpose !== 'noroot' && purpose != 'invites'
         ) return;
+
+        if (!(await Users.findOne({ id: member.id }))) return;
 
         await updateCurrency[subCmd](member.id, purpose, amount);
     });
@@ -84,7 +86,7 @@ export default async (args:CmdoArgs) => {
         }
     });
 
-    await interaction.reply({ embeds: [embed], ephemeral: true });
+    await interaction.editReply({ embeds: [embed] });
     const logChannel = client.channels.cache.find(ch => ch.id == distributeLogs);
     if (logChannel?.isText()) await logChannel.send({ embeds: [embed] });
 }

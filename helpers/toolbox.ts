@@ -26,7 +26,6 @@ export async function getUsersByRole (roleId:string, ignoreById:string[]=[], ign
     let members:GuildMember[] = [];
 
     for (let member of (await server.members.fetch()).toJSON()) {
-        if (!(await Users.findOne({ id: member.id }))) continue;
         if (ignoreBots) if (member.user.bot) continue;
         if (ignoreById.includes(member.id)) continue;
 
