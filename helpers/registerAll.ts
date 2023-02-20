@@ -5,7 +5,7 @@ import impVar from '../data/impVar.json';
 
 async function register():Promise<void> {
     const server = await client.guilds.fetch(impVar.TAISHOKU_SERVER_ID);
-    (await server.members.fetch()).forEach(async member => {
+    server.members.cache.forEach(async member => {
         if (member.user.bot) return;
         let user = await Users.findOne({ id: member.id });
         if (user) {
