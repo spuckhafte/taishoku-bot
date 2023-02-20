@@ -1,5 +1,4 @@
 import { io } from "socket.io-client";
-import { RAMEN_ID, RAMEN_VOTING_SYSTEM_SERVER } from "../data/impVar.json"
 import Users from "../schema/User";
 import client from "../server";
 import updateDb from "./updateDb";

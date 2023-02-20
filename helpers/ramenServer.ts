@@ -17,7 +17,6 @@ export default () => {
             });
             req.on('end', () => {
                 buffer += decoder.end();
-                console.log(buffer);
                 if (JSON.parse(buffer).bot != RAMEN_ID) return;
                 processVote(JSON.parse(buffer));
             });
@@ -26,6 +25,6 @@ export default () => {
     }
 
     httpServer.listen(PORT, () => {
-        console.log(`listening on ${PORT}*`);
+        console.log(`[connected to RAMEN on ${PORT}*]`);
     });
 }

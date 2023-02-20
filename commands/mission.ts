@@ -76,12 +76,15 @@ export default async (args:CmdoArgs) => {
         if (correct) {
             await assignCurrency.fame(interaction.user.id, 'missions', rewards.mission);
             // @ts-ignore
-            embed.footer?.text = `Correct, +${rewards.mission} Fames`
+            embed.footer?.text = `Correct, +${rewards.mission} Fame`
             let prevMissions = user.missions?.missionsCompleted ? user.missions.missionsCompleted : 0;
             await updateDb({ id: user.id }, 'missions.missionsCompleted', prevMissions + 1);
         } else {
+            await assignCurrency.spend.fame(interaction.user.id, 5);
             // @ts-ignore
-            embed.footer?.text = `${wrong} Incorrect`
+            embed.footer?.text = `${wrong} Incorrect, -5 Fame`;
+            let prevMissions = user.missions?.missionsCompleted ? user.missions.missionsCompleted : 0;
+            await updateDb({ id: user.id }, 'missions.missionsCompleted', prevMissions + 1);
         }
         const rowNew = generateOptionButtons(mission, true, correct, false, optionSelected);
         interaction.editReply({ embeds: [embed], components: [rowNew] });
