@@ -9,7 +9,6 @@ export default () => {
     const PORT = process.env.PORT;
 
     function mainServer(req:http.IncomingMessage, res:http.ServerResponse) {
-        console.log(req.method);
         if (req.method == 'POST') {
             const decoder = new StringDecoder('utf-8');
             let buffer = '';
@@ -18,7 +17,7 @@ export default () => {
             });
             req.on('end', () => {
                 buffer += decoder.end();
-                console.log(JSON.parse(buffer));
+                console.log(buffer);
                 if (JSON.parse(buffer).bot != RAMEN_ID) return;
                 processVote(JSON.parse(buffer));
             });
