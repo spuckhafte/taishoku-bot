@@ -9,7 +9,7 @@ export default () => {
     const PORT = process.env.PORT;
 
     function mainServer(req:http.IncomingMessage, res:http.ServerResponse) {
-        console.log('here');
+        console.log(req.method);
         if (req.method == 'POST') {
             const decoder = new StringDecoder('utf-8');
             let buffer = '';
