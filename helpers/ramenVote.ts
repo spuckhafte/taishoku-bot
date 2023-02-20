@@ -9,7 +9,6 @@ import { rewards } from '../data/money.json'
 import assignCurrency from "./assignCurrency";
 
 export async function processVote(data:any) {
-    data = JSON.parse(data);
     let voterId:string = data.user;
     let user = await Users.findOne({ id: voterId });
     if (!user || !user.ramen || isNaN(user.ramen.votes)) {
