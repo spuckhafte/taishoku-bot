@@ -18,5 +18,8 @@
   "devDependencies": {
     "@types/uuid": "^9.0.0",
     "nodemon": "^2.0.20"
+  },
+  "engines": {
+    "node": ">=16.6 <18"
   }
 }
