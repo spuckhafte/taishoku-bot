@@ -1,15 +1,16 @@
-import { CmdoArgs } from "../types";
-import missions from '../data/missions.json';
-import { showcase, one, two, three, correct, wrong, clock } from '../data/emojis.json';
-import { missionTiming } from '../data/settings.json';
-import { rewards } from '../data/money.json';
-import timeGap from '../data/timings.json';
 import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed } from "discord.js";
+import { CmdoArgs } from "../types";
 import client from "../server";
 import assignCurrency from "../helpers/assignCurrency";
 import updateDb from "../helpers/updateDb";
 import Users from "../schema/User";
 import { timeRange } from "../helpers/toolbox";
+
+import missions from '../data/missions.json';
+import { showcase, one, two, three, wrong, clock } from '../data/emojis.json';
+import { missionTiming } from '../data/settings.json';
+import { rewards } from '../data/money.json';
+import timeGap from '../data/timings.json';
 
 const emojiOpts = { 1: one, 2: two, 3: three };
 
@@ -22,8 +23,8 @@ export default async (args:CmdoArgs) => {
     
     let last = user.missions?.lastMission ? user.missions?.lastMission : 0;
 
-    if (timeGap.mission * 1000 < (+Date.now() - +last)) {
-        interaction.reply({
+    if (timeGap.mission * 1000 > (+Date.now() - +last)) {
+        await interaction.reply({
             content: `Wait for \`${(120 - timeRange(`${last}`, Date.now()).minutes).toFixed(2)}\` minutes`,
             ephemeral: true
         });

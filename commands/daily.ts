@@ -48,7 +48,7 @@ export default async (args:CmdoArgs) => {
     if (!user || !user.reminder || !member) {
         if (!user) {
             interaction.reply({
-                content: 'You\'ll be registered soon (10 seconds or so)',
+                content: 'You are not registered, use `/register`',
                 ephemeral: true
             });
         }

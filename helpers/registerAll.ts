@@ -1,35 +1,16 @@
 import Users from '../schema/User';
 import client from '../server';
 import impVar from '../data/impVar.json';
+import { GuildMember } from 'discord.js';
 
 
-async function register():Promise<void> {
-    const server = await client.guilds.fetch(impVar.TAISHOKU_SERVER_ID);
-    server.members.cache.forEach(async member => {
-        if (member.user.bot) return;
-        let user = await Users.findOne({ id: member.id });
-        if (user) {
-            user.username = member.user.username;
-            await user.save();
-            return;
-        };
-
-        await Users.create({
-            username: member.user.username,
-            id: member.id,
-            started: member.joinedTimestamp
-        });
-        // console.log(member.user.username, ' in!');
-    })
+export async function register(member:GuildMember) {
+    await Users.create({
+        username: member.user.username,
+        id: member.id,
+        started: member.joinedTimestamp
+    });
 };
-
-export default (interval:number) => {
-    setInterval(() => {
-        register();
-    }, interval * 1000);
-    // twirlTimer(`updating users in every ${interval}s`)
-    console.log(`updating users in every ${interval}s`)
-}
 
 function findHigestPosition(wrt:number, list:number[], found=-1):number {
     if (list.length == 0) return found;

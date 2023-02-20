@@ -1,4 +1,3 @@
-import titles from "../data/titles.json";
 import { showcase } from '../data/emojis.json';
 import { SelectMenuArgs } from "../types";
 

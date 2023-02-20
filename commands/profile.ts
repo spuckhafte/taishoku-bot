@@ -13,7 +13,13 @@ export default async (args:CmdoArgs) => {
     const interaction = args.Interaction;
     const show = interaction.options.getBoolean("show");
     const user = await Users.findOne({ id: interaction.user.id });
-    if (!user) return;
+    if (!user) {
+        await interaction.reply({
+            content: 'You are not registered, use `/register`',
+            ephemeral: true
+        });
+        return;
+    }
     const member = await (await client.guilds.fetch(TAISHOKU_SERVER_ID)).members.fetch(user.id);
 
     let dpExists = member.displayAvatarURL() ? true : false;

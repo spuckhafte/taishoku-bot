@@ -1,11 +1,11 @@
 import Discord, { Intents } from 'discord.js';
 import mongoose from 'mongoose';
 
-import User from './schema/User';
 import CmdManager from './manager';
 import dotenv from 'dotenv';
 import intializeRamenVoteListener from './helpers/ramenVote';
-import registerAll from './helpers/registerAll';
+import updateDb from './helpers/updateDb';
+import { register } from './helpers/registerAll';
 
 dotenv.config();
 
@@ -29,7 +29,6 @@ const client = new Discord.Client({
 
 client.on('ready', async () => {
     console.log(`[logged in as ${client.user?.username}]`);
-    registerAll(10);
 })
 
 client.on('interactionCreate', async Interaction => {
@@ -48,6 +47,15 @@ client.on('interactionCreate', async Interaction => {
         const modalId = Interaction.customId;
         OtherInteractions.run(modalId, { Interaction });
     }
+});
+
+client.on('guildMemberAdd', async member => {
+    await register(member);
+})
+
+client.on('userUpdate', async (oldUser, newUser) => {
+    if (oldUser.username != newUser.username) return;
+    await updateDb({ id: newUser.id }, 'username', newUser.username);
 });
 
 socket.on('upvote', async data => {

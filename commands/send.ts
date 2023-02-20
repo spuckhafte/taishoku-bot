@@ -37,7 +37,7 @@ export default async (args:CmdoArgs) => {
     
     if (!friend || !user) {
         await interaction.reply({
-            content: "One of you is not registered, you'll be registered soon (10 seconds or so)\nTry again later!",
+            content: "One of you is not registered, use `/register`",
             ephemeral: true
         });
         return;

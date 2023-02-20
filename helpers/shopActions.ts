@@ -16,7 +16,13 @@ import prestigeRoles from '../data/prestigeRoles.json';
 export default async (item:Shop, interaction:CommandInteraction) => {
     if (!interaction.member) return;
     const user = (await Users.findOne({ id: interaction.user.id }));
-    if (!user) return;
+    if (!user) {
+        await interaction.reply({
+            content: 'You are not registered, use `/register`',
+            ephemeral: true
+        });
+        return;
+    }
 
     const userFames = user.totalFame;
 
@@ -134,6 +140,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
                     .setStyle('SHORT')
             );
         
+        console.log('here in modal')
         modal.addComponents(row);
         await interaction.showModal(modal);
     } else if (item.name == 'Personal Channel') {

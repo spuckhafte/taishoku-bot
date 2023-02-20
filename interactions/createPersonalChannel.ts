@@ -45,7 +45,13 @@ export default async (args:ModalArgs) => {
     await assignCurrency.spend.fame(interaction.user.id, item.price, purchaseId);
 
     const user = await Users.findOne({ id: interaction.user.id });
-    if (!user) return;
+    if (!user) {
+        await interaction.reply({
+            content: 'You are not registered, use `/register`',
+            ephemeral: true
+        });
+        return;
+    }
     let prev = user.inventory?.goods?.[5]?.total
     await updateDb({ id: user.id }, 'inventory.goods.5.total', (prev ? prev : 0) + 1);
 
