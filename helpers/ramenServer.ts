@@ -18,6 +18,7 @@ export default () => {
             });
             req.on('end', () => {
                 buffer += decoder.end();
+                console.log(JSON.parse(buffer));
                 if (JSON.parse(buffer).bot != RAMEN_ID) return;
                 processVote(JSON.parse(buffer));
             });
