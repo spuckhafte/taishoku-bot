@@ -22,7 +22,7 @@ const index = {
 }
 
 export default async (fame:number, interaction:CommandInteraction) => {
-    interaction.deferReply();
+    await interaction.deferReply();
     let user = await Users.findOne({ id: interaction.user.id });
     if (!user) {
         interaction.editReply({
