@@ -1,3 +1,4 @@
 node_modules
 .env
 createSlashCmd.js
+archives.ts
