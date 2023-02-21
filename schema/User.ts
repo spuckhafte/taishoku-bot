@@ -257,6 +257,25 @@ const usersSchema = new mongoose.Schema({
         default: '0'
     },
 
+    games: {
+        won: {
+            type: Number,
+            default: 0
+        },
+        coinflip: {
+            type: String,
+            default: '0'
+        },
+        fameCollected: {
+            type: Number,
+            default: 0
+        },
+        elixirCollected: {
+            type: Number,
+            default: 0
+        }
+    },
+
     purchaseHistory: [{ type: String, default: [] }]
 });
 

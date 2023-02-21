@@ -41,6 +41,18 @@ export async function getUsersByRole (roleId:string, ignoreById:string[]=[], ign
     }
 }
 
+export async function registerGamesIfNot(id:string) {
+    const user = await Users.findOne({ id });
+    if (!user) return;
+    user.games = {
+        won: 0,
+        fameCollected: 0,
+        coinflip: '0',
+        elixirCollected: 0
+    }
+    return user.save();
+}
+
 export async function isUserOrRole(roleId:string) {
 
     const server = await client.guilds.fetch(TAISHOKU_SERVER_ID);

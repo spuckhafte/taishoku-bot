@@ -19,7 +19,13 @@ export default async (args:CmdoArgs) => {
     const mission = missions[Math.floor(Math.random() * missions.length)];
 
     const user = await Users.findOne({ id: interaction.user.id });
-    if (!user) return;
+    if (!user) {
+        await interaction.reply({
+            content: 'You are not registered, use `/register`',
+            ephemeral: true
+        });
+        return;
+    }
     
     let last = user.missions?.lastMission ? user.missions?.lastMission : 0;
 

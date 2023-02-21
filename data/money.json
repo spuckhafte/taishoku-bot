@@ -23,6 +23,7 @@
             "fame": 89
         },
         "votes": 100,
-        "mission": 20
+        "mission": 20,
+        "coinFlip": 30
     }
 }

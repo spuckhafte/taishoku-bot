@@ -55,6 +55,14 @@ export default async (args:CmdoArgs) => {
         return;
     }
 
+    if (amount <= 0) {
+        await interaction.reply({
+            content: `Invalid Amount`,
+            ephemeral: true
+        });
+        return;
+    }
+
     const puffy = interaction.guild?.members.cache.find(mem => mem.id == puffyId);
     if (!puffy) return;
 
