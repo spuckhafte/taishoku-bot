@@ -5,16 +5,17 @@ import CmdManager from './manager';
 import dotenv from 'dotenv';
 import updateDb from './helpers/updateDb';
 import { register } from './helpers/registerAll';
-import ramenServer from './helpers/ramenServer';
+import intializeRamenVoteListener from './helpers/ramenVote';
 
 dotenv.config();
 
 const Commando = new CmdManager('./commands', 'ts');
 const OtherInteractions = new CmdManager('./interactions', 'ts');
+const { socket, processVote } = intializeRamenVoteListener();
 
 mongoose.set("strictQuery", false);
 mongoose.connect(process.env.DB ?? "", (e) => console.log(e ? e : '[connected to db]'));
-ramenServer();
+
 
 const client = new Discord.Client({
     intents: [
@@ -56,6 +57,14 @@ client.on('guildMemberAdd', async member => {
 client.on('userUpdate', async (oldUser, newUser) => {
     if (oldUser.username != newUser.username) return;
     await updateDb({ id: newUser.id }, 'username', newUser.username);
+});
+
+socket.on('upvote', async data => {
+    await processVote(data);
+});
+
+socket.on('test', async data => {
+    await processVote(data);
 });
 
 client.login(process.env.TOKEN);
