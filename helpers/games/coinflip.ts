@@ -22,11 +22,11 @@ const index = {
 }
 
 export default async (fame:number, interaction:CommandInteraction) => {
+    interaction.deferReply();
     let user = await Users.findOne({ id: interaction.user.id });
     if (!user) {
-        interaction.reply({
-            content: 'You are not registered, use `/register/`',
-            ephemeral: true
+        interaction.editReply({
+            content: 'You are not registered, use `/register`'
         });
         return;
     }
@@ -51,25 +51,22 @@ export default async (fame:number, interaction:CommandInteraction) => {
     if (!last) last = '0';
 
     if (timeGap.coinflip * 1000 > (+Date.now() - +last)) {
-        await interaction.reply({
-            content: `Wait for \`${(15 - timeRange(`${last}`, Date.now()).minutes).toFixed(2)}\` minutes`,
-            ephemeral: true
+        await interaction.editReply({
+            content: `Wait for \`${(15 - timeRange(`${last}`, Date.now()).minutes).toFixed(2)}\` minutes`
         });
         return;
     }
 
     if (user.totalFame < fame) {
-        await interaction.reply({
-            content: `You can't bet on that, check your balance`,
-            ephemeral: true
+        await interaction.editReply({
+            content: `You can't bet on that, check your balance`
         });
         return;
     }
 
     if (fame <= 0) {
-        await interaction.reply({
+        await interaction.editReply({
             content: `Invalid Amount`,
-            ephemeral: true
         });
         return;
     }
@@ -90,9 +87,8 @@ export default async (fame:number, interaction:CommandInteraction) => {
                 .setStyle('PRIMARY'),
 		);
 
-    const msg = await interaction.reply({
-        components: [btns],
-        fetchReply: true
+    const msg = await interaction.editReply({
+        components: [btns]
     });
 
     const filter = (btn:MessageComponentInteraction) => {
