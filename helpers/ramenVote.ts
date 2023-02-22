@@ -26,7 +26,7 @@ async function processVote(data:any) {
         console.log('[Voter does not exists in the guild]')
         return 0;
     }
-    updateDb({ id: voterId }, 'ramen.votes', user.ramen.votes + 1);
+    await updateDb({ id: voterId }, 'ramen.votes', user.ramen.votes + 1);
     assignCurrency.fame(voterId, 'ramen', rewards.votes);
 
     const chnl = client.channels.cache.find(chnl => chnl.id == votingChannel)

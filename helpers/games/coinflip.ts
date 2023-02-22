@@ -110,7 +110,11 @@ export default async (fame:number, interaction:CommandInteraction) => {
         const bet = +((rewards.coinFlip / 100) * fame).toFixed(2);
 
         await updateDb({ id: interaction.user.id }, 'games.coinflip', Date.now());
-        if (win) await assignCurrency.fame(interaction.user.id, 'games', bet);
+        if (win) {
+            await assignCurrency.fame(interaction.user.id, 'games', bet);
+            if (user && user.games) 
+                await updateDb({ id: interaction.user.id }, 'games.won', user?.games?.won + 1);
+        }
         else await assignCurrency.spend.fame(interaction.user.id, fame);
 
         if (loop != '1' && loop != '2') return;

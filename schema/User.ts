@@ -276,6 +276,13 @@ const usersSchema = new mongoose.Schema({
         }
     },
 
+    chat: {
+        last: { type: String, default: '0' },
+        perIntervalMsg: { type: Number, default: 0 },
+        fameCollected: { type: Number, default: 0 },
+        elixirCollected: { type: Number, default: 0 }
+    },
+
     purchaseHistory: [{ type: String, default: [] }]
 });
 

@@ -47,7 +47,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         let titleList = titles.filter(title => !userRoles?.includes(title.value));
 
         if (titleList.length == 1) {
-            updateDb({ id: user.id }, 'inventory.goods.1.bought', true);
+            await updateDb({ id: user.id }, 'inventory.goods.1.bought', true);
         }
         if (titleList.length == 0) {
             interaction.editReply({

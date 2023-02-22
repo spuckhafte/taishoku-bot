@@ -5,7 +5,7 @@ import { GuildMember } from 'discord.js';
 
 
 export async function register(member:GuildMember) {
-    await Users.create({
+    return await Users.create({
         username: member.user.username,
         id: member.id,
         started: member.joinedTimestamp

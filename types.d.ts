@@ -38,7 +38,7 @@ export type Shop = {
 export type ExistingCmds = 'ping' | 'distribute' | 'profile';
 export type Currencies = 'fame' | 'elixir';
 
-export type Purposes = 'ramen'|'missions'|'roles'|'nitro'|'events'|'noroot'|'invites'|'games';
+export type Purposes = 'ramen'|'missions'|'roles'|'nitro'|'events'|'noroot'|'invites'|'games'|'chat';
 
 export type Services = ["reminders"];
 export type Goods = ["pvtChannels"];

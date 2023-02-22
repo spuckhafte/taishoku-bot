@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import updateDb from './helpers/updateDb';
 import { register } from './helpers/registerAll';
 import intializeRamenVoteListener from './helpers/ramenVote';
+import manageChat from './commands/manageChat';
 
 dotenv.config();
 
@@ -58,6 +59,11 @@ client.on('userUpdate', async (oldUser, newUser) => {
     if (oldUser.username != newUser.username) return;
     await updateDb({ id: newUser.id }, 'username', newUser.username);
 });
+
+client.on('messageCreate', async msg => {
+    if (msg.author.bot) return;
+    manageChat(msg);                
+})
 
 socket.on('upvote', async data => {
     await processVote(data);

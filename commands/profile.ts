@@ -55,6 +55,8 @@ export default async (args:CmdoArgs) => {
                 name: `${emojis.money} Earnings`,
                 value: `**Missions:** **\`${user.missions?.fameCollected.toFixed(2)}F\`  \`${user.missions?.elixirCollected.toFixed(2)}E\`**
 **Roles:** **\`${user.roles?.fameCollected.toFixed(2)}F\`  \`${user.roles?.elixirCollected.toFixed(2)}E\`**
+**Games:** **\`${user.games?.fameCollected.toFixed(2)}F\`  \`${user.chat?.elixirCollected.toFixed(2)}E\`**
+**Chat:** **\`${user.chat?.fameCollected.toFixed(2)}F\`  \`${user.chat?.elixirCollected.toFixed(2)}E\`**
 **Events:** **\`${user.events?.fameCollected.toFixed(2)}F\`  \`${user.events?.elixirCollected.toFixed(2)}E\`**
 **Nitro:** **\`${user.nitro?.fameCollected.toFixed(2)}F\`  \`${user.nitro?.elixirCollected.toFixed(2)}E\`**
 **Ramen:** **\`${user.ramen?.fameCollected.toFixed(2)}F\`  \`${user.ramen?.elixirCollected.toFixed(2)}E\`**
@@ -67,6 +69,8 @@ export default async (args:CmdoArgs) => {
             }, {
                 name: `${emojis.showcase} Showcase`,
                 value: `**Missions Completed:** **\`${user.missions?.missionsCompleted}\`**
+**Games Won:** **\`${user.games?.won} times\`**
+**Missions:** **\`${user.missions?.missionsCompleted} times\`**
 **Server Boosts:** **\`${user.nitro?.boosts} times\`**
 **Nitro Earned:** **\`${user.nitro?.purchased} times\`**
 **Ramen Voted:** **\`${user.ramen?.votes} times\`**`

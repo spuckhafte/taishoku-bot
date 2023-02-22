@@ -78,7 +78,7 @@ export default async (args:CmdoArgs) => {
             embeds: [embed],
             ephemeral: true
         });
-        updateDb({ id: user.id }, 'reminder.daily', Date.now());
+        await updateDb({ id: user.id }, 'reminder.daily', Date.now());
 
     } else {
         const still = (24 - timeRange(user.reminder.daily, Date.now()).hours).toFixed(2);
