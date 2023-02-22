@@ -21,7 +21,7 @@ export default async (args:CmdoArgs) => {
     const filter = interaction.options.getRole('filter', false);
 
     const author = interaction.guild?.members.cache.find(mem => mem.id == interaction.user.id);
-    if (!author?.roles.cache.find(rol => rol.id == adminId || rol.id == puffyId)) {
+    if (!author?.roles.cache.find(rol => rol.id == adminId) && author?.id != puffyId) {
         await interaction.editReply('You don\'t have an authority to start a Heist');
         return;
     }
