@@ -92,7 +92,7 @@ export default async (args:CmdoArgs) => {
 
         const money:StdObject = {};
 
-        const unequalSplit = [120, 110, 100, 90, 80, 70, 60, 40, 30, 20, 10, 0]; // percent;
+        const unequalSplit = [105, 100, 90, 80, 70, 60, 40, 30, 20, 10, 0]; // percent;
 
         for (let users of split) {
             let first = +((random<number>(unequalSplit)/100) * (2 * equalDivision)).toFixed(0);
