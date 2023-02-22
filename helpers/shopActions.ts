@@ -162,8 +162,15 @@ export default async (item:Shop, interaction:CommandInteraction) => {
                     .setLabel('A breathtaking topic for your channel')
                     .setStyle('PARAGRAPH')
             );
+        const row3 = new MessageActionRow<TextInputComponent>()
+            .addComponents(
+                new TextInputComponent()
+                    .setCustomId('channelEmoji')
+                    .setLabel('A cute emoji for your channel')
+                    .setStyle('SHORT')
+            );
         
-        modal.addComponents(row1, row2);
+        modal.addComponents(row1, row2, row3);
         await interaction.showModal(modal);
     } else if (item.name.startsWith('Prestige')) {
         await interaction.deferReply({ ephemeral: true })

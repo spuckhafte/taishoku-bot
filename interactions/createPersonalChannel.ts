@@ -21,19 +21,20 @@ export default async (args:ModalArgs) => {
                         ?.find(user => user.id == interaction.user.id);
     const channelName = interaction.fields.getTextInputValue('channelName');
     const channelTopic = interaction.fields.getTextInputValue('channelTopic');
+    const channelEmoji = interaction.fields.getTextInputValue('channelEmoji');
     const purchaseId = v4();
 
     if (!member) return;
     
-    if (!channelName || !channelTopic) {
+    if (!channelName || !channelTopic || !channelEmoji) {
         interaction.editReply({
             content: "Invalid details, try again"
         });
         return;
     }
-
+    // ⚡・「itashis-shrine」
     const channel = await interaction.guild.channels.create(
-        channelName,
+        `${channelEmoji}・「${channelName}」`,
         { parent: customChannelCategory }
     );
 	await channel.permissionOverwrites.edit(interaction.user, channelPermissions);
