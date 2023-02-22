@@ -52,6 +52,7 @@ client.on('interactionCreate', async Interaction => {
 });
 
 client.on('guildMemberAdd', async member => {
+    if (member.user.bot) return;
     await register(member);
 })
 
