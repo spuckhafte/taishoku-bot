@@ -6,7 +6,7 @@ import { CmdoArgs } from "../types";
 import { TAISHOKU_SERVER_ID } from '../data/impVar.json'
 import { getUsersByRole, isUserOrRole } from '../helpers/toolbox'
 import emojis from '../data/emojis.json';
-import { distributeLogs, adminId } from '../data/settings.json';
+import { distributeLogs, adminId, puffyId } from '../data/settings.json';
 import Users from "../schema/User";
 
 const schemaKeys:string[] = ["ramen", "events", "missions", "nitro", "roles", "invites"];
@@ -24,7 +24,7 @@ export default async (args:CmdoArgs) => {
     
     const allAdmins = await getUsersByRole(adminId);
     let adminIds = allAdmins.members.map(mem => mem.id);
-    if (!adminIds.includes(interaction.user.id)) {
+    if (!adminIds.includes(interaction.user.id) && interaction.user.id != puffyId) {
         await interaction.editReply({
             content: "Only admins can access this command"
         });
