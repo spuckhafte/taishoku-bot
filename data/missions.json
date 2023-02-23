@@ -38,5 +38,10 @@
         "question": "How does someone spend fame on emojis?",
         "options":["Dm Puffy or Zero","/shop","You Can't"],
         "correct": 0
+    },
+    {
+        "question": "1 Elixir is equivalent to how much fame?",
+        "options": ["10", "100", "50"],
+        "correct": 1
     }
 ]
