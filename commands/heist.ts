@@ -5,7 +5,7 @@ import assignCurrency from "../helpers/assignCurrency";
 import Users from "../schema/User";
 import { register } from "../helpers/registerAll";
 import updateDb from "../helpers/updateDb";
-import { adminId, puffyId, heistDocId } from '../data/settings.json';
+import { adminId, puffyId, heistPing } from '../data/settings.json';
 import client from "../server";
 import Heist from "../schema/Heist";
 
@@ -21,7 +21,7 @@ load();
 
 export default async (args:CmdoArgs) => {
     const interaction = args.Interaction;
-    const msg = await interaction.reply({ content: 'Heist Started', fetchReply: true });
+    const msg = await interaction.reply({ content: `<@&${heistPing}> Started`, fetchReply: true });
 
     const pool = interaction.options.getNumber('pool', true);
     const time = interaction.options.getNumber('time', true);
