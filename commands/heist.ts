@@ -5,15 +5,23 @@ import assignCurrency from "../helpers/assignCurrency";
 import Users from "../schema/User";
 import { register } from "../helpers/registerAll";
 import updateDb from "../helpers/updateDb";
-import { adminId, puffyId } from '../data/settings.json';
+import { adminId, puffyId, heistDocId } from '../data/settings.json';
 import client from "../server";
+import Heist from "../schema/Heist";
 
 let membersIn:string[] = [];
 let total = 0;
 
+async function load() {
+    const memFromDb = (await Heist.find({}))[0];
+    membersIn = memFromDb.members
+    total = memFromDb.members.length;
+}
+load();
+
 export default async (args:CmdoArgs) => {
     const interaction = args.Interaction;
-    await interaction.deferReply();
+    const msg = await interaction.reply({ content: 'Heist Started', fetchReply: true });
 
     const pool = interaction.options.getNumber('pool', true);
     const time = interaction.options.getNumber('time', true);
@@ -29,7 +37,8 @@ export default async (args:CmdoArgs) => {
     const row = generateBtn();
     const embed = generateEmbed(pool, time, interaction, max, filter);
 
-    const msg = await interaction.editReply({
+    if (msg.type != 'APPLICATION_COMMAND') return;
+    await msg.edit({
         embeds: [embed],
         components: [row]
     });
@@ -61,15 +70,18 @@ export default async (args:CmdoArgs) => {
 
             membersIn.push(user.id);
             total += 1;
+            const heist = (await Heist.find({}))[0];
+            heist.members.push(user.id);
+            await heist.save();
 
-            await interaction.editReply({
+            await msg.edit({
                 embeds: [generateEmbed(pool, time, interaction, max, filter)],
                 components: [generateBtn(max ? max == total : false)]
             });
     });
 
     setTimeout(async () => {
-        await interaction.editReply({
+        await msg.edit({
             embeds: [generateEmbed(pool, time, interaction, max, filter)],
             components: [generateBtn(true)]
         });
@@ -110,7 +122,7 @@ export default async (args:CmdoArgs) => {
             if (!user) return;
             if (money[id] > 0) {
                 await assignCurrency.fame(id, 'noroot', money[id]);
-                await interaction.channel?.send(`<@${id}> got away with **${money[id]} Fame**`);
+                await interaction.channel?.send(`<@${id}> got away with **${(+money[id]).toFixed(2)} Fame**`);
 
             } else if (money[id] == 0) {
                 await interaction.channel?.send(`<@${id}> got nothing, sed`);
@@ -120,12 +132,15 @@ export default async (args:CmdoArgs) => {
                         await updateDb({ id }, 'totalFame', 0);
                     else await assignCurrency.spend.fame(id, Math.abs(money[id]));
                 }
-                await interaction.channel?.send(`<@${id}> *got caught* and lost **${Math.abs(money[id])}**, lmao`);
+                await interaction.channel?.send(`<@${id}> *got caught* and lost **${Math.abs(money[id]).toFixed(2)}**, lmao`);
             }
         }
 
         total = 0;
         membersIn = [];
+        const heist = (await Heist.find({}))[0];
+        heist.members = [];
+        await heist.save();
 
         await interaction.channel?.send('**HEIST COMPLETE**');
 
