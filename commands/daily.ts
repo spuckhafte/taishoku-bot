@@ -37,12 +37,12 @@ export default async (args:CmdoArgs) => {
         let impRoleId = Object.keys(roleBenifits)[+roleId_i];
         let roleBenefit = Object.values(roleBenifits)[+roleId_i];
 
-        if (userRoles.includes(impRoleId) && !defaultDone) {
+        if (member?.roles.cache.find(r => r.id == impRoleId) && !defaultDone) {
             benefitRole += roleBenefit;
             defaultDone = true;
         }
 
-        if (userRoles.includes(rewards.booster.id) && !nitroDone) {
+        if (member?.roles.cache.find(r => r.id == rewards.booster.id) && !nitroDone) {
             benefitNitro += rewards.booster.fame;
             nitroDone = true;
         }
@@ -54,11 +54,10 @@ export default async (args:CmdoArgs) => {
         let pRole:string = prestigeRoles[pRole_i];
 
         // @ts-ignore (pRole_i + 1 is defenitely a key of rewards.premium)
-        let benefitPerTier = rewards.premium[+pRole_i + 1];
-        if (userRoles.includes(pRole)) {
-            benefitPrestige = benefitPerTier;
-        }
-        if (!userRoles.includes(pRole) && +pRole_i == 0) break;
+        let benefitPerTier = +rewards.premium[+pRole_i + 1];
+        if (member?.roles.cache.find(r => r.id == pRole)) {
+            benefitPrestige += benefitPerTier;
+        } else break;
     }
 
     if (!user || !user.reminder || !member) {
