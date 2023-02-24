@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed } from "discord.js";
+import { CommandInteraction, Formatters, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed } from "discord.js";
 import { CmdoArgs, StdObject } from "../types";
 import { spending } from '../data/emojis.json';
 import assignCurrency from "../helpers/assignCurrency";
@@ -21,7 +21,7 @@ load();
 
 export default async (args:CmdoArgs) => {
     const interaction = args.Interaction;
-    const msg = await interaction.reply({ content: `<@&${heistPing}> Started`, fetchReply: true });
+    const msg = await interaction.reply({ content: `${Formatters.roleMention(heistPing)} Started`, fetchReply: true });
 
     const pool = interaction.options.getNumber('pool', true);
     const time = interaction.options.getNumber('time', true);
