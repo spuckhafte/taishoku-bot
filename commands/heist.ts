@@ -14,7 +14,6 @@ let total = 0;
 
 async function load() {
     const memFromDb = (await Heist.find({}))[0];
-    console.log(memFromDb.members);
     membersIn = memFromDb.members
     total = memFromDb.members.length;
 }
@@ -22,7 +21,7 @@ load();
 
 export default async (args:CmdoArgs) => {
     const interaction = args.Interaction;
-    const msg = await interaction.reply({ content: `${Formatters.roleMention(heistPing)} Started`, fetchReply: true });
+    const msg = await interaction.reply({ content: `Heist Started`, fetchReply: true });
 
     const pool = interaction.options.getNumber('pool', true);
     const time = interaction.options.getNumber('time', true);
@@ -34,6 +33,7 @@ export default async (args:CmdoArgs) => {
         await interaction.editReply('You don\'t have an authority to start a Heist');
         return;
     }
+    await interaction.channel?.send(`${Formatters.roleMention(heistPing)}`);
 
     const row = generateBtn();
     const embed = generateEmbed(pool, time, interaction, max, filter);
