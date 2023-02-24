@@ -17,6 +17,8 @@ import prestigeRoles from '../data/prestigeRoles.json';
 
 export default async (args:CmdoArgs) => {
     const interaction = args.Interaction;
+    await interaction.deferReply({ ephemeral: true });
+
     const discordUser = interaction.user;
     const member = (await interaction.guild?.members.fetch())
                         ?.find(mem => mem.id == discordUser.id);
@@ -57,7 +59,6 @@ export default async (args:CmdoArgs) => {
 
         // @ts-ignore (pRole_i + 1 is defenitely a key of rewards.premium)
         let benefitPerTier = +rewards.premium[+pRole_i + 1];
-        console.log(member?.roles.cache.find(r => r.id == pRole), pRole)
         if (member?.roles.cache.find(r => r.id == pRole)) {
             benefitPrestige += benefitPerTier;
         } else break;
@@ -65,9 +66,8 @@ export default async (args:CmdoArgs) => {
 
     if (!user || !user.reminder || !member) {
         if (!user) {
-            interaction.reply({
-                content: 'You are not registered, use `/register`',
-                ephemeral: true
+            interaction.editReply({
+                content: 'You are not registered, use `/register`'
             });
         }
         return;
@@ -92,9 +92,8 @@ export default async (args:CmdoArgs) => {
             }
         });
 
-        await interaction.reply({
-            embeds: [embed],
-            ephemeral: true
+        await interaction.editReply({
+            embeds: [embed]
         });
         await updateDb({ id: user.id }, 'reminder.daily', Date.now());
 
@@ -108,9 +107,8 @@ export default async (args:CmdoArgs) => {
                 text: 'Try again later'
             }
         });
-        interaction.reply({
-            embeds: [embed],
-            ephemeral: true,
+        interaction.editReply({
+            embeds: [embed]
         });
     }
 }
