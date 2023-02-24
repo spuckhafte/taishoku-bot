@@ -12,6 +12,7 @@ import roleBenifits from '../data/fameForRoles.json';
 import { rewards } from '../data/money.json';
 import { earning, clock } from '../data/emojis.json'
 import settings from '../data/settings.json';
+import prestigeRoles from '../data/prestigeRoles.json';
 
 
 export default async (args:CmdoArgs) => {
@@ -22,13 +23,16 @@ export default async (args:CmdoArgs) => {
     const user = await Users.findOne({ id: discordUser.id });
 
     const userRoles = member?.roles.cache.map(role => role.id);
+    if (!userRoles) return;
+
     let benefitRole = 0;
     let benefitNitro = 0;
+    let benefitPrestige = 0;
     let nitroDone = false;
-    let defaultDone = false
+    let defaultDone = false;
+    let prestigeDone = false;
 
     for (let roleId_i in Object.keys(roleBenifits)) { // doing it the "normal" way was messing it up, idk
-        if (!userRoles) break;
         if (nitroDone && defaultDone) break;
 
         let impRoleId = Object.keys(roleBenifits)[+roleId_i];
@@ -43,6 +47,19 @@ export default async (args:CmdoArgs) => {
             benefitNitro += rewards.booster.fame;
             nitroDone = true;
         }
+    }
+
+    for (let pRole_i in Object.keys(prestigeRoles)) {
+        if (+pRole_i == (Object.keys(prestigeRoles).length - 1)) break;
+        // @ts-ignore (pRole_i is defentily a key of prestigeRoles object)
+        let pRole:string = prestigeRoles[pRole_i];
+
+        // @ts-ignore (pRole_i + 1 is defenitely a key of rewards.premium)
+        let benefitPerTier = rewards.premium[+pRole_i + 1];
+        if (userRoles.includes(pRole)) {
+            benefitPrestige = benefitPerTier;
+        }
+        if (!userRoles.includes(pRole) && +pRole_i == 0) break;
     }
 
     if (!user || !user.reminder || !member) {
