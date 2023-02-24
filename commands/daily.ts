@@ -50,11 +50,14 @@ export default async (args:CmdoArgs) => {
 
     for (let pRole_i in Object.keys(prestigeRoles)) {
         if (+pRole_i == (Object.keys(prestigeRoles).length - 1)) break;
+
+        let key = Object.keys(prestigeRoles)[pRole_i];
         // @ts-ignore (pRole_i is defentily a key of prestigeRoles object)
-        let pRole:string = prestigeRoles[pRole_i];
+        let pRole:string = prestigeRoles[key];
 
         // @ts-ignore (pRole_i + 1 is defenitely a key of rewards.premium)
         let benefitPerTier = +rewards.premium[+pRole_i + 1];
+        console.log(member?.roles.cache.find(r => r.id == pRole), pRole)
         if (member?.roles.cache.find(r => r.id == pRole)) {
             benefitPrestige += benefitPerTier;
         } else break;
