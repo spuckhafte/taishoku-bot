@@ -11,7 +11,6 @@ import timings from '../data/timings.json';
 import roleBenifits from '../data/fameForRoles.json';
 import { rewards } from '../data/money.json';
 import { earning, clock } from '../data/emojis.json'
-import settings from '../data/settings.json';
 import prestigeRoles from '../data/prestigeRoles.json';
 
 
@@ -82,7 +81,7 @@ export default async (args:CmdoArgs) => {
 
         const embed = new MessageEmbed({
             title: `${earning} DAILY REWARD`,
-            description: `**Default Reward:** \`${rewards.daily}F\`\n**Role Benefit:** \`${benefitRole}F\`\n**Nitro Benefit:** \`${benefitNitro}F\`\n**Prestige Benefit:** \`${benefitPrestige}\``,
+            description: `**Default Reward:** \`${rewards.daily}F\`\n**Role Benefit:** \`${benefitRole}F\`\n**Nitro Benefit:** \`${benefitNitro}F\`\n**Prestige Benefit:** \`${benefitPrestige}F\``,
             thumbnail: {
                 url: client.user?.displayAvatarURL()
             },
