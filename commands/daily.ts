@@ -30,7 +30,6 @@ export default async (args:CmdoArgs) => {
     let benefitPrestige = 0;
     let nitroDone = false;
     let defaultDone = false;
-    let prestigeDone = false;
 
     for (let roleId_i in Object.keys(roleBenifits)) { // doing it the "normal" way was messing it up, idk
         if (nitroDone && defaultDone) break;
@@ -81,7 +80,7 @@ export default async (args:CmdoArgs) => {
 
         const embed = new MessageEmbed({
             title: `${earning} DAILY REWARD`,
-            description: `**Default Reward:** \`${rewards.daily}F\`\n**Role Benefit:** \`${benefitRole}F\`\n**Nitro Benefit:** \`${benefitNitro}F\``,
+            description: `**Default Reward:** \`${rewards.daily}F\`\n**Role Benefit:** \`${benefitRole}F\`\n**Nitro Benefit:** \`${benefitNitro}F\`\n**Prestige Benefit:** \`${benefitPrestige}\``,
             thumbnail: {
                 url: client.user?.displayAvatarURL()
             },
