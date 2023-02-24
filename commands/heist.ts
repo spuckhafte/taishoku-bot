@@ -14,6 +14,7 @@ let total = 0;
 
 async function load() {
     const memFromDb = (await Heist.find({}))[0];
+    console.log(memFromDb.members);
     membersIn = memFromDb.members
     total = memFromDb.members.length;
 }
@@ -119,7 +120,7 @@ export default async (args:CmdoArgs) => {
 
         for (let id of Object.keys(money)) {
             const user = await Users.findOne({ id });
-            if (!user) return;
+            if (!user) continue;
             if (money[id] > 0) {
                 await assignCurrency.fame(id, 'noroot', money[id]);
                 await interaction.channel?.send(`<@${id}> got away with **${(+money[id]).toFixed(2)} Fame**`);
