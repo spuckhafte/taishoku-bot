@@ -35,10 +35,16 @@ export type Shop = {
     type: string;
 }
 
+export type LbUser = {
+    id: String,
+    username: String,
+}
+
 export type ExistingCmds = 'ping' | 'distribute' | 'profile';
 export type Currencies = 'fame' | 'elixir';
 
 export type Purposes = 'ramen'|'missions'|'roles'|'nitro'|'events'|'noroot'|'invites'|'games'|'chat';
+export type LbParams = 'fame'|'elixir'|'missions'|'games'
 
 export type Services = ["reminders"];
 export type Goods = ["pvtChannels"];

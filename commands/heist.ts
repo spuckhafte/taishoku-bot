@@ -57,19 +57,13 @@ export default async (args:CmdoArgs) => {
             await btn.deferUpdate();
             const user = btn.user;
 
-            if (membersIn.includes(user.id)) {
-                await btn.reply({ content: 'You already joined', ephemeral: true });
-                return;
-            }
+            if (membersIn.includes(user.id)) return;
 
             const member = interaction.guild?.members.cache.find(mem => mem.id == user.id);
             if (!member) return;
 
             if (filter) {
-                if (!member?.roles.cache.find(role => role.id == filter.id)) {
-                    await btn.reply({ content: 'You do not have that specific role', ephemeral: true });
-                    return;
-                }
+                if (!member?.roles.cache.find(role => role.id == filter.id)) return;
             }
 
             const userDb = await Users.exists({ id: user.id });
@@ -85,7 +79,6 @@ export default async (args:CmdoArgs) => {
                 embeds: [generateEmbed(pool, time, interaction, max, filter)],
                 components: [generateBtn(max ? max == total : false)]
             });
-            await btn.reply({ content: 'You joined the heist', ephemeral: true });
     });
 
     setTimeout(async () => {
