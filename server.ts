@@ -57,7 +57,7 @@ client.on('guildMemberAdd', async member => {
 })
 
 client.on('userUpdate', async (oldUser, newUser) => {
-    if (oldUser.username != newUser.username) return;
+    if (oldUser.username == newUser.username) return;
     await updateDb({ id: newUser.id }, 'username', newUser.username);
 });
 
