@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import updateDb from './helpers/updateDb';
 import { register } from './helpers/registerAll';
 import intializeRamenVoteListener from './helpers/ramenVote';
-import manageChat from './commands/manageChat';
+import manageChat from './helpers/manageChat';
 
 dotenv.config();
 
