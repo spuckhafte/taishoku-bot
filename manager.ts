@@ -19,6 +19,7 @@ class CmdManager {
     };
 
     run = (cmdName:string, args:CmdoArgs|SelectMenuArgs|ModalArgs) => {
+        if (typeof this.ResgisteredCommands[cmdName] !== 'function') return;
         this.ResgisteredCommands[cmdName](args);
     }
 };
