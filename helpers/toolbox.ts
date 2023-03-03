@@ -47,7 +47,10 @@ export async function registerGamesIfNot(id:string) {
     user.games = {
         won: 0,
         fameCollected: 0,
+
         coinflip: '0',
+        rps: '0',
+
         elixirCollected: 0
     }
     return user.save();

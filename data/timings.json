@@ -1,5 +1,6 @@
 {
     "daily": 86400,
     "mission": 7200,
-    "coinflip": 900
+    "coinflip": 900,
+    "rps": 300
 }

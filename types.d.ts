@@ -40,6 +40,12 @@ export type LbUser = {
     username: String,
 }
 
+export type GameResponse = {
+    [index:string]: {
+        [index:string]: string
+    }
+}
+
 export type ExistingCmds = 'ping' | 'distribute' | 'profile';
 export type Currencies = 'fame' | 'elixir';
 

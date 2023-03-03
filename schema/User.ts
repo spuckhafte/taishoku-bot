@@ -262,10 +262,16 @@ const usersSchema = new mongoose.Schema({
             type: Number,
             default: 0
         },
+
         coinflip: {
             type: String,
             default: '0'
         },
+        rps: {
+            type: String,
+            default: '0'
+        },
+        
         fameCollected: {
             type: Number,
             default: 0
