@@ -43,6 +43,14 @@ export default async (args:CmdoArgs) => {
         return;
     }
 
+    if (friend.inventory?.services?.[10]?.bought == true) {
+        await interaction.reply({
+            content: "You can't transfer money to a Tier 5",
+            ephemeral: true
+        });
+        return;
+    }
+
     if (typeof user?.totalElixir != 'number' || typeof user?.totalFame != 'number') return;
 
     const deltaTime = Date.now() - +user.sendCooldown;
