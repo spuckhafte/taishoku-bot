@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import updateDb from './helpers/updateDb';
 import { register } from './helpers/registerAll';
 import intializeRamenVoteListener from './helpers/ramenVote';
-import manageChat from './commands/manageChat';
+import manageChat from './helpers/manageChat';
 
 dotenv.config();
 
@@ -57,7 +57,7 @@ client.on('guildMemberAdd', async member => {
 })
 
 client.on('userUpdate', async (oldUser, newUser) => {
-    if (oldUser.username != newUser.username) return;
+    if (oldUser.username == newUser.username) return;
     await updateDb({ id: newUser.id }, 'username', newUser.username);
 });
 
