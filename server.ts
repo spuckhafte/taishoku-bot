@@ -34,7 +34,7 @@ client.on('ready', async () => {
 })
 
 client.on('interactionCreate', async Interaction => {
-    if (Interaction.channel) if (Interaction.channel.id != '1059766480033558579') return;
+    // if (Interaction.channel) if (Interaction.channel.id != '1059766480033558579') return;
     if (Interaction.isCommand()) {
         let cmdName = Interaction.commandName;
         Commando.run(cmdName, { Interaction });
@@ -53,21 +53,21 @@ client.on('interactionCreate', async Interaction => {
 
 client.on('guildMemberAdd', async member => {
     if (member.user.bot) return;
-    // await register(member);
+    await register(member);
 })
 
 client.on('userUpdate', async (oldUser, newUser) => {
     if (oldUser.username == newUser.username) return;
-    // await updateDb({ id: newUser.id }, 'username', newUser.username);
+    await updateDb({ id: newUser.id }, 'username', newUser.username);
 });
 
 client.on('messageCreate', async msg => {
     if (msg.author.bot) return;
-    // manageChat(msg);                
+    manageChat(msg);                
 })
 
 socket.on('upvote', async () => {
-    // await processVote(data);
+    await processVote(data);
 });
 
 socket.on('test', async data => {
