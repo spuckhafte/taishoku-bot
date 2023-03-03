@@ -66,7 +66,7 @@ client.on('messageCreate', async msg => {
     manageChat(msg);                
 })
 
-socket.on('upvote', async () => {
+socket.on('upvote', async (data) => {
     await processVote(data);
 });
 
