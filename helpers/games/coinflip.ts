@@ -138,7 +138,7 @@ async function animation(loop:'1'|'2', inter:CommandInteraction, win:boolean, ch
         }
         else await inter.editReply({ embeds: [embed], files: [coinImg], components: [] });
 
-        await sleep(500);
+        await sleep(900);
     }
 } 
 
