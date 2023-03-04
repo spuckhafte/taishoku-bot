@@ -7,6 +7,7 @@ import updateDb from './helpers/updateDb';
 import { register } from './helpers/registerAll';
 import intializeRamenVoteListener from './helpers/ramenVote';
 import manageChat from './helpers/manageChat';
+import Users from './schema/User';
 
 dotenv.config();
 
@@ -54,7 +55,12 @@ client.on('interactionCreate', async Interaction => {
 client.on('guildMemberAdd', async member => {
     if (member.user.bot) return;
     await register(member);
-})
+});
+
+client.on('guildMemberRemove', async member => {
+    if (member.user.bot) return;
+    await Users.deleteOne({ id: member.id });
+});
 
 client.on('userUpdate', async (oldUser, newUser) => {
     if (oldUser.username == newUser.username) return;
@@ -64,7 +70,7 @@ client.on('userUpdate', async (oldUser, newUser) => {
 client.on('messageCreate', async msg => {
     if (msg.author.bot) return;
     manageChat(msg);                
-})
+});
 
 socket.on('upvote', async (data) => {
     await processVote(data);

@@ -76,6 +76,7 @@ export function timeRange(from:string|undefined, till:string|number|undefined=Da
 
     const oneDay = 24 * 60 * 60 * 1000;
     return {
+        ms: deltaTime,
         seconds: deltaTime / 1000,
         minutes: deltaTime / (1000 * 60),
         hours: deltaTime / (1000 * 60* 60),
