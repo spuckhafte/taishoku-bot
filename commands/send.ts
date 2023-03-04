@@ -148,7 +148,7 @@ function afterTax(amt:number, tax:number, noTaxLimit:number) {
 function sendReceipt(subCmd:string, interaction:CommandInteraction, target:string, amount:number, tax:number, finalAmt:number) {
     if (!client.user) return;
     return new MessageEmbed({
-        title: `${money} ${subCmd.toUpperCase()} ${subCmd.toUpperCase()} TRANSFER RECEIPT`,
+        title: `${money} ${subCmd.toUpperCase()} TRANSFER RECEIPT`,
         description: `**From: **<@${interaction.user.id}>\n**To:** <@${target}>\n**Amount: \`${amount} ${subCmd}\`**\n**Tax: \`${tax} ${subCmd}\`**\n**Final Amount: \`${finalAmt} ${subCmd}\`**`,
         thumbnail: {
             url: client.user.displayAvatarURL()
