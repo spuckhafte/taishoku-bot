@@ -52,7 +52,7 @@ export default async (args:CmdoArgs) => {
         }
         if (btn.customId == 'yourPage') {
             const userIndex = allUsers.findIndex(val => val.id == interaction.user.id);
-            const userPage = Math.ceil(userIndex / 10);
+            const userPage = Math.ceil((userIndex + 1) / 10);
             page = userPage;
         }
 
