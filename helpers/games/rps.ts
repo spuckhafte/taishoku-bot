@@ -13,7 +13,7 @@ import timeGap from '../../data/timings.json';
 const waitingTime = 300; // seconds
 const responseTime = 10; // --
 
-const ephemeralCond = (user:User, author:User, bet:number) => (user.bot || user.id == author.id || bet <= 0);
+const ephemeralCond = (user:User, author:User, bet:number) => (user.bot || user.id == author.id || bet <= 0 || bet > 500);
 
 const Games:GameResponse = {}; // { msgId: { user_1_id: r, user_2_id: p } }
 
@@ -26,6 +26,11 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
 
     if (fame <= 0) {
         await interaction.editReply('Invalid bet amount');
+        return;
+    }
+
+    if (fame > 500) {
+        await interaction.editReply('You can atmost bet for `500` Fame');
         return;
     }
 
