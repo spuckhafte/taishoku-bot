@@ -79,6 +79,13 @@
             "price": 300000,
             "currency": "Fame",
             "type": "s"
+        }, {
+            "name": "Add Bot",
+            "desc": "Add your favourite bot to the server (*no nukes*)",
+            "id": "11",
+            "price": 12000,
+            "currency": "Fame",
+            "type": "g"
         }
     ]
 }

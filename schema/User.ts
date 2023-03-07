@@ -237,6 +237,16 @@ const usersSchema = new mongoose.Schema({
                     type: Number,
                     default: 0
                 }
+            },
+            11: {
+                name: {
+                    type: String,
+                    default: "Add Bot"
+                },
+                total: {
+                    type: Number,
+                    default: 0
+                }
             }
         }
     },

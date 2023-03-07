@@ -7,7 +7,7 @@ import assignCurrency from "./assignCurrency";
 import updateDb from "./updateDb";
 import { generateReceipt } from "./toolbox";
 
-import { storeLogsChannel, rogueId } from '../data/settings.json'
+import { storeLogsChannel, rogueId, talkToModChnl, channelPermissions } from '../data/settings.json'
 import { showcase } from '../data/emojis.json';
 import villages from '../data/villages.json';
 import titles from '../data/titles.json';
@@ -192,5 +192,34 @@ export default async (item:Shop, interaction:CommandInteraction) => {
             embeds: [embed]
         });
         if (logChannel?.isText()) logChannel.send({ embeds: [embed] });
+    } else if (item.name == 'Add Bot') {
+        await interaction.deferReply({ ephemeral: true });
+        if (!user.inventory?.goods) return;
+        if (!user.inventory.goods[11]) {
+            user.inventory.goods[11] = { name: "Add Bot", total: 0 };
+            await user.save();
+        }
+
+        const receipt = generateReceipt(user, item, interaction, purchaseId);
+
+        const modChnl = await client.channels.fetch(talkToModChnl)
+        if (modChnl?.type != 'GUILD_TEXT') return;
+        await modChnl.permissionOverwrites.edit(interaction.user, {
+            ...channelPermissions, 
+            READ_MESSAGE_HISTORY: false
+        });
+        
+        await modChnl.send(`<@${interaction.user.id}> => ${purchaseId}`);
+
+        if (logChannel?.isText()) {
+            await logChannel.send({ embeds: [receipt] });
+        }
+        await interaction.editReply({ 
+            content: `Head over to <#${talkToModChnl}> and ask the mods to add a bot`,
+            embeds: [receipt] 
+        });
+
+        await assignCurrency.spend.fame(user.id, item.price, purchaseId);
+        await updateDb(user.id, 'inventory.goods.11.total', (prev:any) => prev.inventory.goods[11].total + 1);
     }
 }
