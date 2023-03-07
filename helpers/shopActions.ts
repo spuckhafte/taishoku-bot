@@ -204,12 +204,9 @@ export default async (item:Shop, interaction:CommandInteraction) => {
 
         const modChnl = await client.channels.fetch(talkToModChnl)
         if (modChnl?.type != 'GUILD_TEXT') return;
-        await modChnl.permissionOverwrites.edit(interaction.user, {
-            ...channelPermissions, 
-            READ_MESSAGE_HISTORY: false
-        });
+        await modChnl.permissionOverwrites.edit(interaction.user, channelPermissions);
         
-        await modChnl.send(`<@${interaction.user.id}> => \`${purchaseId}\` :: ${item.name}`);
+        await modChnl.send(`<@${interaction.user.id}> => \`${purchaseId}\` => ${item.name}`);
 
         if (logChannel?.isText()) {
             await logChannel.send({ embeds: [receipt] });
