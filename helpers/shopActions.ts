@@ -209,7 +209,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
             READ_MESSAGE_HISTORY: false
         });
         
-        await modChnl.send(`<@${interaction.user.id}> => ${purchaseId}`);
+        await modChnl.send(`<@${interaction.user.id}> => \`${purchaseId}\` :: ${item.name}`);
 
         if (logChannel?.isText()) {
             await logChannel.send({ embeds: [receipt] });
