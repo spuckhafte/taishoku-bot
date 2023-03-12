@@ -165,7 +165,7 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
             if (winIndex == -1) return;
 
             const winId = Object.keys(Games[msg.id])[winIndex];
-            await assignCurrency.fame(winId, 'games', (bet * 0.7);
+            await assignCurrency.fame(winId, 'games', (bet * 0.7));
             await assignCurrency.spend.fame(Object.keys(Games[msg.id])[winIndex == 0 ? 1 : 0], fame);
 
             await updateDb({ id: interaction.user.id }, 'games.rps', Date.now());
