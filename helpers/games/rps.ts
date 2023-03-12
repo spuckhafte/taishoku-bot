@@ -73,7 +73,7 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
         return;
     }
 
-    const bet = fame * 2;
+    let bet = fame * 2;
     let rival = await Users.findOne({ id: against.id });
     if (!rival) {
         await interaction.editReply('Rival is not registered, ask him to use \`/register\`')
@@ -162,7 +162,7 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
             if (winIndex == -1) return;
 
             const winId = Object.keys(Games[msg.id])[winIndex];
-            await assignCurrency.fame(winId, 'games', bet);
+            await assignCurrency.fame(winId, 'games', (bet * 0.3));
             await assignCurrency.spend.fame(Object.keys(Games[msg.id])[winIndex == 0 ? 1 : 0], fame);
 
             await updateDb({ id: interaction.user.id }, 'games.rps', Date.now());
@@ -250,8 +250,9 @@ async function sendController(
         embed.description = `**Pool: \`${bet} Fame\`**\n`
                             + `\n**${interaction.user.username}:** ${res[firstIndex]}\n**${against.username}:** ${res[secondIndex]}\n\n`
                             + `${won > -1 ? `<@${users[won]}> **Won ${party}**` : 'Its a **Tie**'}`
-                            + (won > -1 ? `\n\n${earning} <@${users[won]}> won **${bet} Fame**\n${money} <@${users[looseIndex]}> lost **${bet/2} Fame**` 
+                            + (won > -1 ? `\n\n${earning} <@${users[won]}> won **${bet*0.3} Fame**\n${money} <@${users[looseIndex]}> lost **${bet/2} Fame**` 
                               : '');
+
         embed.footer = { text: `${res[firstIndex]} vs ${res[secondIndex]}` };
     }
 
