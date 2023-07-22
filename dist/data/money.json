@@ -1,0 +1,46 @@
+{
+    "fame": {
+        "tax": {
+            "transfer": 5,
+            "to-elixir": 5,
+            "noTaxTransferLim": 100,
+            "noCooldownTaxFameAmt": 5
+        }
+    },
+    "elixir": {
+        "tax": {
+            "transfer": 1,
+            "to-elixir": 3,
+            "noTaxTransferLim": 2,
+            "noCooldownTaxElixirAmt": 1
+        }
+    },
+    "rewards": {
+        "daily": 2,
+        "weekly": 10,
+        "booster": {
+            "id": "994430535470424074",
+            "fame": 89
+        },
+        "votes": 100,
+        "mission": 20,
+        "coinFlip": 30,
+        "chat": {
+            "a": 2,
+            "b": 4,
+            "c": 6,
+            "time": 1800,
+            "bp": {
+                "a": 1,
+                "b": 10,
+                "c": 50
+            }
+        },
+        "premium": {
+            "1": "50",
+            "2": "50",
+            "3": "50",
+            "4": "50"
+        }
+    }
+}

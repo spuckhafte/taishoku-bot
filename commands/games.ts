@@ -1,12 +1,12 @@
-import coinflip from "../helpers/games/coinflip";
-import rps from "../helpers/games/rps";
+import coinflip from "../helpers/games/coinflip.js";
+import rps from "../helpers/games/rps.js";
 import { CmdoArgs } from "../types";
 
 export default async (args:CmdoArgs) => {
     const interaction = args.Interaction;
     const game = interaction.options.getSubcommand();
 
-    const fame = interaction.options.getNumber('fame', false);
+    const fame = interaction.options.getNumber('fame', false)
     const friend = interaction.options.getUser('against', false);
 
     if (game == 'coinflip') {

@@ -1,19 +1,19 @@
 import { CommandInteraction, Message, MessageActionRow, MessageEmbed, MessageSelectMenu, Modal, SelectMenuInteraction, TextInputComponent } from "discord.js";
 import { Shop, Tiers } from "../types";
-import client from "../server";
+import client from "../server.js";
 import { v4 } from 'uuid';
-import Users from "../schema/User";
-import assignCurrency from "./assignCurrency";
-import updateDb from "./updateDb";
-import { generateReceipt } from "./toolbox";
+import Users from "../schema/User.js";
+import assignCurrency from "./assignCurrency.js";
+import updateDb from "./updateDb.js";
+import { generateReceipt } from "./toolbox.js";
 
 import { storeLogsChannel, rogueId, talkToModChnl, channelPermissions } from '../data/settings.json'
-import { showcase } from '../data/emojis.json';
-import villages from '../data/villages.json';
-import titles from '../data/titles.json';
-import prestigeRoles from '../data/prestigeRoles.json';
+import { showcase } from '../data/emojis.json'
+import villages from '../data/villages.json'
+import titles from '../data/titles.json'
+import prestigeRoles from '../data/prestigeRoles.json'
 
-export default async (item:Shop, interaction:CommandInteraction) => {
+export default async (item: Shop, interaction: CommandInteraction) => {
     if (!interaction.member) return;
     const user = (await Users.findOne({ id: interaction.user.id }));
     if (!user) {
@@ -36,7 +36,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
 
     const logChannel = client.channels.cache.find(ch => ch.id == storeLogsChannel);
     const member = (await interaction.guild?.members.fetch())
-                                ?.find(user => user.id == interaction.user.id);
+        ?.find(user => user.id == interaction.user.id);
     const purchaseId = v4();
 
     // done: change village, rogue, title, personal role
@@ -57,19 +57,19 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         }
 
         const row = new MessageActionRow()
-			.addComponents(
-				new MessageSelectMenu()
-					.setCustomId('title')
-					.setPlaceholder('If you loose this msg, contact admins')
-					.addOptions(titleList)
-		    );
+            .addComponents(
+                new MessageSelectMenu()
+                    .setCustomId('title')
+                    .setPlaceholder('If you loose this msg, contact admins')
+                    .addOptions(titleList)
+            );
         const embed = generateReceipt(user, item, interaction, purchaseId);
 
         await assignCurrency.spend.fame(user.id, item.price, purchaseId);
 
         if (logChannel?.isText()) await logChannel.send({ embeds: [embed] });
-        await interaction.editReply({ 
-            embeds: [embed], 
+        await interaction.editReply({
+            embeds: [embed],
             components: [row]
         });
 
@@ -89,13 +89,13 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         }).filter(vill => vill != undefined);
 
         const row = new MessageActionRow()
-        .addComponents(
-            new MessageSelectMenu()
-                .setCustomId('changeVillage')
-                .setPlaceholder('If you loose this msg, contact admins')
-                // @ts-ignore
-                .addOptions(villagesList)
-        );
+            .addComponents(
+                new MessageSelectMenu()
+                    .setCustomId('changeVillage')
+                    .setPlaceholder('If you loose this msg, contact admins')
+                    // @ts-ignore
+                    .addOptions(villagesList)
+            );
 
         const embed = generateReceipt(user, item, interaction, purchaseId);
 
@@ -108,7 +108,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
     } else if (item.name == 'Rogue Ninja') {
         await interaction.deferReply({ ephemeral: true })
         if (!user.inventory?.services) return;
-        
+
         if (user.inventory?.services['4']?.bought) {
             await interaction.editReply({
                 content: "You are already a Rogue Ninja"
@@ -139,7 +139,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
                     .setLabel('A sweet name for your role')
                     .setStyle('SHORT')
             );
-        
+
         console.log('here in modal')
         modal.addComponents(row);
         await interaction.showModal(modal);
@@ -169,7 +169,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
                     .setLabel('A cute emoji for your channel')
                     .setStyle('SHORT')
             );
-        
+
         modal.addComponents(row1, row2, row3);
         await interaction.showModal(modal);
     } else if (item.name.startsWith('Prestige')) {
@@ -177,7 +177,7 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         const convert = { 'I': '1', 'II': '2', 'III': '3', 'IV': '4', 'V': '5' };
         const dbRef = { 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 } // tier: item-id
         // @ts-ignore Prestige's suffix is definitely a key of convert
-        const tier:Tiers = item.name.split('Prestige')[1].trim();
+        const tier: Tiers = item.name.split('Prestige')[1].trim();
         const roleId = prestigeRoles[`Prestige ${tier}`];
 
         // @ts-ignore dbRef[convert[tier]] is defenetily an id
@@ -205,18 +205,18 @@ export default async (item:Shop, interaction:CommandInteraction) => {
         const modChnl = await client.channels.fetch(talkToModChnl)
         if (modChnl?.type != 'GUILD_TEXT') return;
         await modChnl.permissionOverwrites.edit(interaction.user, channelPermissions);
-        
+
         await modChnl.send(`<@${interaction.user.id}> => \`${purchaseId}\` => ${item.name}`);
 
         if (logChannel?.isText()) {
             await logChannel.send({ embeds: [receipt] });
         }
-        await interaction.editReply({ 
+        await interaction.editReply({
             content: `Head over to <#${talkToModChnl}> and ask the mods to add a bot`,
-            embeds: [receipt] 
+            embeds: [receipt]
         });
 
         await assignCurrency.spend.fame(user.id, item.price, purchaseId);
-        await updateDb(user.id, 'inventory.goods.11.total', (prev:any) => prev.inventory.goods[11].total + 1);
+        await updateDb(user.id, 'inventory.goods.11.total', (prev: any) => prev.inventory.goods[11].total + 1);
     }
 }

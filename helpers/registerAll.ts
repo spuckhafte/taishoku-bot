@@ -1,6 +1,4 @@
-import Users from '../schema/User';
-import client from '../server';
-import impVar from '../data/impVar.json';
+import Users from '../schema/User.js';
 import { GuildMember } from 'discord.js';
 
 

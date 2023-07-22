@@ -1,30 +1,30 @@
 import { Formatters, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed } from "discord.js";
-import Users from "../schema/User";
-import client from "../server";
+import Users from "../schema/User.js";
+import client from "../server.js";
 import { CmdoArgs, LbParams, StdObject } from "../types";
-import { right, left, fastLeft, fastRight, showcase } from '../data/emojis.json';
+import { right, left, fastLeft, fastRight, showcase } from '../data/emojis.json'
 
-export default async (args:CmdoArgs) => {
+export default async (args: CmdoArgs) => {
     const interaction = args.Interaction;
     await interaction.deferReply();
-    
+
     const lbType = interaction.options.getSubcommand()
 
     // @ts-ignore (lbType is defenitely LbParams type)
     const { findQuery, where } = queryForSorting(lbType);
     if (!findQuery) return;
 
-    const sortQueryObject:StdObject = {};
+    const sortQueryObject: StdObject = {};
     sortQueryObject[findQuery[1]] = -1;
 
     const allUsers = await Users.find({}, findQuery).sort(sortQueryObject);
     const total = allUsers.length;
     const lastPage = Math.ceil(total / 10);
     const { embed, row } = await showPage(1, allUsers, total, interaction.user.id, where, lbType, interaction.user.displayAvatarURL());
-    
+
     const msg = await interaction.editReply({ embeds: [embed], components: [row] });
 
-    const filter = (btn:MessageComponentInteraction) => {
+    const filter = (btn: MessageComponentInteraction) => {
         return btn.user.id == interaction.user.id && msg.id == btn.message.id;
     }
 
@@ -43,7 +43,7 @@ export default async (args:CmdoArgs) => {
         }
         if (btn.customId == 'turnPageRight') {
             page += 1;
-        } 
+        }
         if (btn.customId == 'turnPageLeft') {
             page -= 1;
         }
@@ -72,7 +72,7 @@ export default async (args:CmdoArgs) => {
     })
 }
 
-function queryForSorting(type:LbParams) {
+function queryForSorting(type: LbParams) {
     if (type == 'fame' || type == 'elixir') {
         return {
             findQuery: ['id', `total${type.replace(type[0], type[0].toUpperCase())}`, 'username'],
@@ -82,13 +82,13 @@ function queryForSorting(type:LbParams) {
         if (type == 'games') return {
             findQuery: ['id', 'games.won', 'username'], where: 'won'
         }
-        if (type == 'missions') return { 
+        if (type == 'missions') return {
             findQuery: ['id', 'missions.missionsCompleted', 'username'], where: 'missionsCompleted'
         }
     }
 }
 
-async function showPage(pageNo:number, all:any, totalPage:number, id:string, where:string, type:string, avatar:string) {
+async function showPage(pageNo: number, all: any, totalPage: number, id: string, where: string, type: string, avatar: string) {
     const from = (pageNo - 1) * 10;
     // @ts-ignore
     const userIndex = all.findIndex(val => val.id == id);
@@ -106,7 +106,7 @@ async function showPage(pageNo:number, all:any, totalPage:number, id:string, whe
         title: `${showcase} ${type} LB`.toUpperCase(),
         description: desc,
         thumbnail: { url: client.user?.displayAvatarURL() },
-        footer: { 
+        footer: {
             text: `Page ${pageNo} of ${totalPage}`,
             iconURL: avatar
         }
@@ -141,7 +141,7 @@ async function showPage(pageNo:number, all:any, totalPage:number, id:string, whe
                 .setStyle('SECONDARY')
                 .setDisabled(pageNo == totalPage)
         )
-        
+
     if (userExists) {
         row.addComponents(
             new MessageButton()

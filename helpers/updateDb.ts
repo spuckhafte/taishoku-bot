@@ -1,4 +1,4 @@
-import Users from '../schema/User';
+import Users from '../schema/User.js';
 import { StdObject } from '../types';
 
 export default async (query:StdObject, updateWhat:string, updateValue:any, fetch=false) => {

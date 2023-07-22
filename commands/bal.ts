@@ -1,10 +1,10 @@
 import { MessageEmbed } from "discord.js";
 import { CmdoArgs } from "../types";
-import { earning } from '../data/emojis.json';
-import Users from "../schema/User";
-import client from "../server";
+import { earning } from '../data/emojis.json'
+import Users from "../schema/User.js";
+import client from "../server.js";
 
-export default async (args:CmdoArgs) => {
+export default async (args: CmdoArgs) => {
     const interaction = args.Interaction;
     const user = await Users.findOne({ id: interaction.user.id });
 

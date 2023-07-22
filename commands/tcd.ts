@@ -1,12 +1,12 @@
 import { CmdoArgs } from "../types";
-import { daily, mission, coinflip, rps, sendCd } from '../data/timings.json';
-import { correct, clock } from '../data/emojis.json';
+import { daily, mission, coinflip, rps, sendCd } from '../data/timings.json'
+import { correct, clock } from '../data/emojis.json'
 import { MessageEmbed } from "discord.js";
-import Users from "../schema/User";
-import { timeRange } from "../helpers/toolbox";
-import client from "../server";
+import Users from "../schema/User.js";
+import { timeRange } from "../helpers/toolbox.js";
+import client from "../server.js";
 
-export default async (args:CmdoArgs) => {
+export default async (args: CmdoArgs) => {
     const interaction = args.Interaction;
 
     const user = await Users.findOne({ id: interaction.user.id });
@@ -23,38 +23,38 @@ export default async (args:CmdoArgs) => {
 
     const dailyDb = user.reminder?.daily;
     const dailyDt = timeRange(dailyDb, now);
-    const dText = dailyDb ? (dailyDt.seconds > daily) 
-                            ? correct 
-                            : `\`${Math.ceil(24 - dailyDt.hours)} hr\`` 
-                        : correct;
-    
+    const dText = dailyDb ? (dailyDt.seconds > daily)
+        ? correct
+        : `\`${Math.ceil(24 - dailyDt.hours)} hr\``
+        : correct;
+
     const missionDb = user.missions?.lastMission;
     const missionDt = timeRange(missionDb, now);
-    const mText = missionDb ? (missionDt.seconds > mission) 
-                                ? correct 
-                                : `\`${Math.ceil(120 - missionDt.minutes)} min\`` 
-                            : correct;
+    const mText = missionDb ? (missionDt.seconds > mission)
+        ? correct
+        : `\`${Math.ceil(120 - missionDt.minutes)} min\``
+        : correct;
 
     const coinflipDb = user.games?.coinflip;
     const coinflipDt = timeRange(coinflipDb, now);
-    const coinText = coinflip ? (coinflipDt.seconds > coinflip) 
-                                ? correct 
-                                : `\`${Math.ceil(15 - coinflipDt.minutes)} min\`` 
-                            : correct;
-    
+    const coinText = coinflip ? (coinflipDt.seconds > coinflip)
+        ? correct
+        : `\`${Math.ceil(15 - coinflipDt.minutes)} min\``
+        : correct;
+
     const rpsDb = user.games?.rps;
     const rpsDt = timeRange(rpsDb, now);
-    const rpsText = rps ? (rpsDt.seconds > rps) 
-                            ? correct 
-                            : `\`${Math.ceil(5 - rpsDt.minutes)} min\`` 
-                        : correct;
+    const rpsText = rps ? (rpsDt.seconds > rps)
+        ? correct
+        : `\`${Math.ceil(5 - rpsDt.minutes)} min\``
+        : correct;
 
     const sendCdDb = user.sendCooldown;
     const sendCdDt = timeRange(sendCdDb, now);
-    const sendText = sendCd ? (sendCdDt.seconds > sendCd) 
-                                ? correct 
-                                : `\`${Math.ceil(5 - sendCdDt.minutes)} min\`` 
-                            : correct;
+    const sendText = sendCd ? (sendCdDt.seconds > sendCd)
+        ? correct
+        : `\`${Math.ceil(5 - sendCdDt.minutes)} min\``
+        : correct;
 
     const embed = new MessageEmbed({
         title: `${clock} Cooldowns`,

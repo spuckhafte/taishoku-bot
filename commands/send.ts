@@ -1,24 +1,25 @@
 import { CommandInteraction, MessageEmbed } from "discord.js";
-import Users from "../schema/User";
-import client from "../server";
+import Users from "../schema/User.js";
+import client from "../server.js";
 import { CmdoArgs } from "../types";
-import assignCurrency from "../helpers/assignCurrency";
+import assignCurrency from "../helpers/assignCurrency.js";
+import updateDb from "../helpers/updateDb.js";
+import { timeRange } from "../helpers/toolbox.js";
 
-import { fame, elixir } from '../data/money.json';
-import { puffyId, puffyTaxLog, sendMoneyCd } from '../data/settings.json';
-import { money } from '../data/emojis.json';
-import updateDb from "../helpers/updateDb";
-import { timeRange } from "../helpers/toolbox";
+import { fame, elixir } from '../data/money.json'
+import { puffyId, puffyTaxLog, sendMoneyCd } from '../data/settings.json'
+import { money } from '../data/emojis.json'
 
 
-export default async (args:CmdoArgs) => {
+
+export default async (args: CmdoArgs) => {
     const interaction = args.Interaction;
     const subCmd = interaction.options.getSubcommand();
     const target = interaction.options.getUser('friend', true);
     const amount = interaction.options.getNumber('amount', true);
     let purpose = interaction.options.getString('purpose');
 
-    const validPurpose:string[] = ["ramen", "events", "missions", "nitro", "roles", "invites"];
+    const validPurpose: string[] = ["ramen", "events", "missions", "nitro", "roles", "invites"];
 
     if (!client.user || !client.user.avatar) return;
     if (subCmd !== 'fame' && subCmd !== 'elixir') return;
@@ -34,7 +35,7 @@ export default async (args:CmdoArgs) => {
 
     const user = await Users.findOne({ id: interaction.user.id });
     const friend = await Users.findOne({ id: target.id });
-    
+
     if (!friend || !user) {
         await interaction.reply({
             content: "One of you is not registered, use `/register`",
@@ -55,7 +56,7 @@ export default async (args:CmdoArgs) => {
 
     const deltaTime = Date.now() - +user.sendCooldown;
     if (deltaTime < sendMoneyCd * 1000) {
-        const still = (+(sendMoneyCd/60).toFixed(0) - timeRange(user.sendCooldown, Date.now()).minutes).toFixed(2);
+        const still = (+(sendMoneyCd / 60).toFixed(0) - timeRange(user.sendCooldown, Date.now()).minutes).toFixed(2);
         await interaction.reply({
             content: `Wait for \`${still} minutes\``,
             ephemeral: true
@@ -74,8 +75,8 @@ export default async (args:CmdoArgs) => {
     const puffy = interaction.guild?.members.cache.find(mem => mem.id == puffyId);
     if (!puffy) return;
 
-    if (purpose != "ramen" && purpose != 'events' && purpose != "missions" && 
-            purpose != "nitro" && purpose != "roles" && purpose !== 'noroot' && purpose != 'invites'
+    if (purpose != "ramen" && purpose != 'events' && purpose != "missions" &&
+        purpose != "nitro" && purpose != "roles" && purpose !== 'noroot' && purpose != 'invites'
     ) return;
 
     if (subCmd == 'fame') {
@@ -89,7 +90,7 @@ export default async (args:CmdoArgs) => {
             return;
         }
 
-        if (tax < fame.tax.noCooldownTaxFameAmt) 
+        if (tax < fame.tax.noCooldownTaxFameAmt)
             await updateDb({ id: user.id }, 'sendCooldown', Date.now());
 
         await assignCurrency.fame(friend?.id, purpose, finalAmt);
@@ -115,7 +116,7 @@ export default async (args:CmdoArgs) => {
             return;
         }
 
-        if (tax < elixir.tax.noCooldownTaxElixirAmt) 
+        if (tax < elixir.tax.noCooldownTaxElixirAmt)
             await updateDb({ id: user.id }, 'sendCooldown', Date.now());
 
         await assignCurrency.elixir(friend?.id, purpose, finalAmt);
@@ -129,23 +130,23 @@ export default async (args:CmdoArgs) => {
         if (puffLog?.isText() && tax > 0) await puffLog.send(`**+${tax} ${subCmd}**`);
         await interaction.reply({ embeds: [receipt] });
     }
-    
+
 }
 
 
-function afterTax(amt:number, tax:number, noTaxLimit:number) {
+function afterTax(amt: number, tax: number, noTaxLimit: number) {
     if (amt <= noTaxLimit) return {
         finalAmt: amt,
         tax: 0
     }
-    const taxIncrement = (tax/100) * (amt - noTaxLimit);
+    const taxIncrement = (tax / 100) * (amt - noTaxLimit);
     return {
         finalAmt: amt + +taxIncrement.toFixed(2),
         tax: +taxIncrement.toFixed(2)
     }
 }
 
-function sendReceipt(subCmd:string, interaction:CommandInteraction, target:string, amount:number, tax:number, finalAmt:number) {
+function sendReceipt(subCmd: string, interaction: CommandInteraction, target: string, amount: number, tax: number, finalAmt: number) {
     if (!client.user) return;
     return new MessageEmbed({
         title: `${money} ${subCmd.toUpperCase()} TRANSFER RECEIPT`,

@@ -1,15 +1,15 @@
 import { MessageAttachment, MessageEmbed } from "discord.js";
-import Users from "../schema/User";
-import client from "../server";
+import Users from "../schema/User.js";
+import client from "../server.js";
 import { CmdoArgs } from "../types";
-import emojis from '../data/emojis.json';
+import emojis from '../data/emojis.json'
 import { TAISHOKU_SERVER_ID } from '../data/impVar.json'
 import Jimp from "jimp";
 import fs from 'fs';
 
 const nitroAdrs = './assets/nitro.png';
 
-export default async (args:CmdoArgs) => {
+export default async (args: CmdoArgs) => {
     const interaction = args.Interaction;
     const show = interaction.options.getBoolean("show");
     const user = await Users.findOne({ id: interaction.user.id });
@@ -24,7 +24,7 @@ export default async (args:CmdoArgs) => {
 
     let dpExists = member.displayAvatarURL() ? true : false;
 
-    let imageUrl:string = '';
+    let imageUrl: string = '';
     let nitroRole = member.roles.cache.toJSON().find(role => role.name == 'Server Booster');
     let attachement;
     let locationImg;
@@ -83,7 +83,7 @@ export default async (args:CmdoArgs) => {
             url: imageUrl
         }
     }
-    
+
     if (!attachement) {
         await interaction.reply({
             embeds: [embed],
@@ -100,10 +100,10 @@ export default async (args:CmdoArgs) => {
 }
 
 
-async function imageOverlay(originalImage:string, imageOverlay:string, id:string) {
+async function imageOverlay(originalImage: string, imageOverlay: string, id: string) {
     originalImage = originalImage.replace('webp', 'jpg');
     let watermark = await Jimp.read(imageOverlay);
-    watermark = watermark.resize(50,50); // Resizing watermark image
+    watermark = watermark.resize(50, 50); // Resizing watermark image
     let image = await Jimp.read(originalImage);
     image = image.resize(128, 128); // Resizing actual img to a std size
     image.composite(watermark, 85, 80, {

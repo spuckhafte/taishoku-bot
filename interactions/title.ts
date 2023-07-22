@@ -1,7 +1,7 @@
-import { showcase } from '../data/emojis.json';
+import { showcase } from '../data/emojis.json'
 import { SelectMenuArgs } from "../types";
 
-export default async (args:SelectMenuArgs) => {
+export default async (args: SelectMenuArgs) => {
     const interaction = args.Interaction;
     const titleId = interaction.values[0];
 

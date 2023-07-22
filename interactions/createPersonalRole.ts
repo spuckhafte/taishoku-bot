@@ -1,23 +1,23 @@
-import assignCurrency from "../helpers/assignCurrency";
+import assignCurrency from "../helpers/assignCurrency.js";
 import { ModalArgs } from "../types";
-import updateDb from "../helpers/updateDb";
-import Users from "../schema/User";
-import client from "../server";
+import updateDb from "../helpers/updateDb.js";
+import Users from "../schema/User.js";
+import client from "../server.js";
 import { v4 } from "uuid";
+import { generateReceipt } from "../helpers/toolbox.js";
 
-import { shop } from "../data/shop.json";
+import { shop } from '../data/shop.json'
 import { storeLogsChannel } from '../data/settings.json'
-import { generateReceipt } from "../helpers/toolbox";
 
-export default async (args:ModalArgs) => {
+export default async (args: ModalArgs) => {
     const interaction = args.Interaction;
     const member = (await interaction.guild?.members.fetch())
-                        ?.find(user => user.id == interaction.user.id);
+        ?.find(user => user.id == interaction.user.id);
     const roleName = interaction.fields.getTextInputValue('roleName');
     const purchaseId = v4();
 
     interaction.deferReply({ ephemeral: true })
-    
+
     if (!roleName) {
         await interaction.editReply({
             content: "Invalid name, try again"
@@ -47,7 +47,7 @@ export default async (args:ModalArgs) => {
     await updateDb({ id: user.id }, 'inventory.goods.3.total', (prev ? prev : 0) + 1);
 
     const embed = generateReceipt(user, item, interaction, purchaseId);
-    await interaction.editReply({ 
+    await interaction.editReply({
         embeds: [embed]
     });
 

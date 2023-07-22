@@ -1,6 +1,6 @@
-import { register } from "../helpers/registerAll";
-import updateDb from "../helpers/updateDb";
-import Users from "../schema/User";
+import { register } from "../helpers/registerAll.js";
+import updateDb from "../helpers/updateDb.js";
+import Users from "../schema/User.js";
 import { CmdoArgs } from "../types";
 
 export default async (args:CmdoArgs) => {

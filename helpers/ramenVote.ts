@@ -1,12 +1,12 @@
 import { io } from "socket.io-client";
-import { RAMEN_ID, RAMEN_VOTING_SYSTEM_SERVER } from "../data/impVar.json"
-import Users from "../schema/User";
-import client from "../server";
-import updateDb from "./updateDb";
+import { RAMEN_ID, RAMEN_VOTING_SYSTEM_SERVER } from '../data/impVar.json'
+import Users from "../schema/User.js";
+import client from "../server.js";
+import updateDb from "./updateDb.js";
 
 import { votingChannel } from '../data/settings.json'
 import { rewards } from '../data/money.json'
-import assignCurrency from "./assignCurrency";
+import assignCurrency from "./assignCurrency.js";
 
 export default () => {
     const socket = io(RAMEN_VOTING_SYSTEM_SERVER);
@@ -18,9 +18,9 @@ export default () => {
     }
 };
 
-async function processVote(data:any) {
+async function processVote(data: any) {
     data = JSON.parse(data);
-    let voterId:string = data.user;
+    let voterId: string = data.user;
     let user = await Users.findOne({ id: voterId });
     if (!user || !user.ramen || isNaN(user.ramen.votes)) {
         console.log('[Voter does not exists in the guild]')

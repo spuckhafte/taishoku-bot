@@ -1,6 +1,6 @@
-import Users from '../schema/User';
+import Users from '../schema/User.js';
 import { Purposes } from '../types';
-import updateDb from './updateDb';
+import updateDb from './updateDb.js';
 
 async function addFame(userId:string, where:Purposes, fame:number, purchaseId='') {
     let user = await Users.findOne({ id: userId });

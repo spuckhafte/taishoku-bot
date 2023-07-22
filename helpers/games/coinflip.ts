@@ -1,18 +1,18 @@
-import { 
-    CommandInteraction, 
-    MessageActionRow, 
-    MessageAttachment, 
+import {
+    CommandInteraction,
+    MessageActionRow,
+    MessageAttachment,
     MessageButton,
-    MessageComponentInteraction, 
+    MessageComponentInteraction,
     MessageEmbed
-} 
-from "discord.js";
+}
+    from "discord.js";
 import Users from "../../schema/User";
 
-import { game } from '../../data/emojis.json';
-import { rewards } from '../../data/money.json';
+import { game } from '../../data/emojis.json'
+import { rewards } from '../../data/money.json'
 import { registerGamesIfNot, timeRange } from '../toolbox'
-import timeGap from '../../data/timings.json';
+import timeGap from '../../data/timings.json'
 import updateDb from "../updateDb";
 import assignCurrency from "../assignCurrency";
 
@@ -21,7 +21,7 @@ const index = {
     'euro': '2'
 }
 
-export default async (fame:number, interaction:CommandInteraction) => {
+export default async (fame: number, interaction: CommandInteraction) => {
     await interaction.deferReply();
     let user = await Users.findOne({ id: interaction.user.id });
     if (!user) {
@@ -37,7 +37,7 @@ export default async (fame:number, interaction:CommandInteraction) => {
             if (!newUser) return;
             user = newUser;
         }
-        
+
         if (!user.games?.coinflip) {
             // @ts-ignore
             user.games.coinflip = '0';
@@ -74,24 +74,24 @@ export default async (fame:number, interaction:CommandInteraction) => {
     if (!interaction.channel) return;
 
     const btns = new MessageActionRow()
-		.addComponents(
-			new MessageButton()
+        .addComponents(
+            new MessageButton()
                 .setCustomId('dollar')
                 .setLabel('Dollar')
                 .setStyle('PRIMARY'),
-		)
-		.addComponents(
-			new MessageButton()
+        )
+        .addComponents(
+            new MessageButton()
                 .setCustomId('euro')
                 .setLabel('Euro')
                 .setStyle('PRIMARY'),
-		);
+        );
 
     const msg = await interaction.editReply({
         components: [btns]
     });
 
-    const filter = (btn:MessageComponentInteraction) => {
+    const filter = (btn: MessageComponentInteraction) => {
         return btn.user.id == interaction.user.id && msg.id == btn.message.id;
     }
 
@@ -112,7 +112,7 @@ export default async (fame:number, interaction:CommandInteraction) => {
         await updateDb({ id: interaction.user.id }, 'games.coinflip', Date.now());
         if (win) {
             await assignCurrency.fame(interaction.user.id, 'games', bet);
-            if (user && user.games) 
+            if (user && user.games)
                 await updateDb({ id: interaction.user.id }, 'games.won', user?.games?.won + 1);
         }
         else await assignCurrency.spend.fame(interaction.user.id, fame);
@@ -123,26 +123,26 @@ export default async (fame:number, interaction:CommandInteraction) => {
     })
 }
 
-async function animation(loop:'1'|'2', inter:CommandInteraction, win:boolean, choice:string, coin:string, bet:number) {
+async function animation(loop: '1' | '2', inter: CommandInteraction, win: boolean, choice: string, coin: string, bet: number) {
     const phase = ['a', 'b', 'c', 'd', 'e', 'f'];
     for (let i of phase) {
         let url = i == 'f' ? `loop${loop}` : `loop-${i}`;
         const { embed, coinImg } = generateEmbed(url, choice);
         if (i == 'f') {
             embed.description = `Your choice: **${choice.toUpperCase()}**\nCoin flipped to: **${coin.toUpperCase()}**\n\n${win ? '**You Win**' : '**You Loose**'}`,
-            embed.footer = {
-                text: `${win ? '+' : '-'}${bet} Fame`,
-                iconURL: inter.user.displayAvatarURL()
-            }
+                embed.footer = {
+                    text: `${win ? '+' : '-'}${bet} Fame`,
+                    iconURL: inter.user.displayAvatarURL()
+                }
             await inter.editReply({ embeds: [embed], files: [coinImg], components: [] });
         }
         else await inter.editReply({ embeds: [embed], files: [coinImg], components: [] });
 
         await sleep(900);
     }
-} 
+}
 
-function generateEmbed(imageUrl:string, choice:string) {
+function generateEmbed(imageUrl: string, choice: string) {
     const embed = new MessageEmbed({
         title: `${game} Coinflip`,
         description: `Your choice: **${choice.toUpperCase()}**\n*The coin is flipping*`
@@ -155,6 +155,6 @@ function generateEmbed(imageUrl:string, choice:string) {
     return { embed, coinImg }
 }
 
-async function sleep(ms:number) {
+async function sleep(ms: number) {
     await new Promise(resolve => setTimeout(resolve, ms));
 }

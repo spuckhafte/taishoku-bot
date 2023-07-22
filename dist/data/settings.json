@@ -1,0 +1,22 @@
+{
+    "votingChannel": "1038812315988013076",
+    "storeLogsChannel": "1077090442723733514",
+    "adminId": "995698004067631235",
+    "rogueId": "1030110703157252157",
+    "distributeLogs": "1077092978113400875",
+    "talkToModChnl": "1082488603696971866",
+    "puffyId": "987669538764095549",
+    "puffyTaxLog": "1077090641953173504",
+    "channelPermissions": {
+        "SEND_MESSAGES": true,
+        "EMBED_LINKS": true,
+        "ATTACH_FILES": true,
+        "VIEW_CHANNEL": true
+    },
+    "customChannelCategory": "1032402133003280454",
+    "missionTiming": 20,
+    "sendMoneyCd": 300,
+    "chatLog": "1077761717930577960",
+    "heistDocId": "1234567890",
+    "heistPing": "1078306089055039538"
+}

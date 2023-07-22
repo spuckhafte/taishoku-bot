@@ -1,6 +1,6 @@
 import { CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageComponentInteraction, MessageEmbed, User } from 'discord.js'
 import Jimp from 'jimp';
-import { game, rock, paper, scissors, party, clock, earning, money, hammer } from '../../data/emojis.json';
+import { game, rock, paper, scissors, party, clock, earning, money, hammer } from '../../data/emojis.json'
 import Users from '../../schema/User';
 import client from '../../server';
 import { GameResponse, StdObject } from '../../types';
@@ -8,20 +8,20 @@ import assignCurrency from '../assignCurrency';
 import { registerGamesIfNot, timeRange } from '../toolbox';
 import updateDb from '../updateDb';
 import fs from 'fs/promises';
-import timeGap from '../../data/timings.json';
+import timeGap from '../../data/timings.json'
 
 const waitingTime = 300; // seconds
 const responseTime = 10; // --
 
-const ephemeralCond = (user:User, author:User, bet:number) => (user.bot || user.id == author.id || bet <= 0 || bet > 500);
+const ephemeralCond = (user: User, author: User, bet: number) => (user.bot || user.id == author.id || bet <= 0 || bet > 500);
 
-const Games:GameResponse = {}; // { msgId: { user_1_id: r, user_2_id: p } }
+const Games: GameResponse = {}; // { msgId: { user_1_id: r, user_2_id: p } }
 
-export default async (fame:number, against:User, interaction:CommandInteraction) => {
-    const msg = await interaction.deferReply({ 
-            fetchReply: true, ephemeral: ephemeralCond(against, interaction.user, fame)
+export default async (fame: number, against: User, interaction: CommandInteraction) => {
+    const msg = await interaction.deferReply({
+        fetchReply: true, ephemeral: ephemeralCond(against, interaction.user, fame)
     });
-    
+
     fame = +fame.toFixed(2);
 
     if (fame <= 0) {
@@ -48,7 +48,7 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
             if (!newUser) return;
             user = newUser;
         }
-        
+
         if (!user.games?.coinflip) {
             // @ts-ignore
             user.games.coinflip = '0';
@@ -85,7 +85,7 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
             if (!newrival) return;
             rival = newrival;
         }
-        
+
         if (!rival.games?.coinflip) {
             // @ts-ignore
             rival.games.coinflip = '0';
@@ -109,7 +109,7 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
         title: `${game} Rock Paper Scissor`,
         description: `**Waiting for *<@${against.id}>* to join**\n**Bet: \`${fame} fame\`**`,
         footer: {
-            text: `Game will expire in ${waitingTime/60} minutes`
+            text: `Game will expire in ${waitingTime / 60} minutes`
         }
     });
     const row = new MessageActionRow()
@@ -119,13 +119,13 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
                 .setLabel('Join')
                 .setStyle('SUCCESS')
         );
-    
+
     await interaction.editReply({ embeds: [embed], components: [row] });
 
 
-    const filter = (btn:MessageComponentInteraction) => {
+    const filter = (btn: MessageComponentInteraction) => {
         return (btn.user.id == against.id || btn.user.id == interaction.user.id)
-                && msg.id == btn.message.id;
+            && msg.id == btn.message.id;
     }
 
     const rivalCollector = interaction.channel?.createMessageComponentCollector({
@@ -150,12 +150,12 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
 
             if (!Games[msg.id][btn.user.id])
                 Games[msg.id][btn.user.id] = btn.customId.split('-')[1];
-                
+
             if (Object.keys(Games[msg.id]).length !== 2) return;
             done = true;
 
             const winIndex = winner(Object.values(Games[msg.id]));
-            
+
             const emojiMap = { 'r': rock, 'p': paper, 's': scissors };
 
             // @ts-ignore (resp is definitely 'r' or 'p' or 's')
@@ -169,14 +169,14 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
             await assignCurrency.spend.fame(Object.keys(Games[msg.id])[winIndex == 0 ? 1 : 0], fame);
 
             await updateDb({ id: interaction.user.id }, 'games.rps', Date.now());
-            await updateDb({ id: winId }, 'games.won', (prev:any) => prev.games.won + 1);
+            await updateDb({ id: winId }, 'games.won', (prev: any) => prev.games.won + 1);
         })
-        responseCollector?.on('end', async () => { 
+        responseCollector?.on('end', async () => {
             delete Games[msg.id];
 
             if (done) return;
 
-            await interaction.editReply({ 
+            await interaction.editReply({
                 content: `${clock} Game Timedout`,
                 embeds: [],
                 components: []
@@ -197,7 +197,7 @@ export default async (fame:number, against:User, interaction:CommandInteraction)
 
 
 async function sendController(
-    bet:number, interaction:CommandInteraction, against:User, res:string[]=[], users:string[]=[], won=-2
+    bet: number, interaction: CommandInteraction, against: User, res: string[] = [], users: string[] = [], won = -2
 ) {
 
     const embed = new MessageEmbed({
@@ -232,13 +232,13 @@ async function sendController(
     let picUrl;
 
     if (won >= 0) {
-        const winnImg = interaction.user.id == users[won] 
-                        ? interaction.user.displayAvatarURL()
-                        : against.displayAvatarURL();
+        const winnImg = interaction.user.id == users[won]
+            ? interaction.user.displayAvatarURL()
+            : against.displayAvatarURL();
         const looseImg = interaction.user.id != users[won]
-                        ? interaction.user.displayAvatarURL()
-                        : against.displayAvatarURL();
-        
+            ? interaction.user.displayAvatarURL()
+            : against.displayAvatarURL();
+
         picUrl = await shameImage(winnImg, looseImg, interaction.id);
         attachment = new MessageAttachment(picUrl, `favicon.png`);
 
@@ -248,36 +248,36 @@ async function sendController(
     if (won !== -2) {
         const firstIndex = users.indexOf(interaction.user.id);
         const secondIndex = firstIndex == 0 ? 1 : 0
-        const looseIndex = won > -1 ? (won == 0 ? 1 : 0) : -1; 
+        const looseIndex = won > -1 ? (won == 0 ? 1 : 0) : -1;
 
         embed.description = `**Pool: \`${bet} Fame\`**\n`
-                            + `\n**${interaction.user.username}:** ${res[firstIndex]}\n**${against.username}:** ${res[secondIndex]}\n\n`
-                            + `${won > -1 ? `<@${users[won]}> **Won ${party}**` : 'Its a **Tie**'}`
-                            + (won > -1 ? `\n\n${earning} <@${users[won]}> won **${bet*0.7} Fame**\n${money} <@${users[looseIndex]}> lost **${bet/2} Fame**` 
-                              : '');
+            + `\n**${interaction.user.username}:** ${res[firstIndex]}\n**${against.username}:** ${res[secondIndex]}\n\n`
+            + `${won > -1 ? `<@${users[won]}> **Won ${party}**` : 'Its a **Tie**'}`
+            + (won > -1 ? `\n\n${earning} <@${users[won]}> won **${bet * 0.7} Fame**\n${money} <@${users[looseIndex]}> lost **${bet / 2} Fame**`
+                : '');
 
         embed.footer = { text: `${res[firstIndex]} vs ${res[secondIndex]}` };
     }
 
-    await interaction.editReply({ 
-        embeds: [embed], 
-        components: won==-2 ? [row] : [],
+    await interaction.editReply({
+        embeds: [embed],
+        components: won == -2 ? [row] : [],
         files: attachment ? [attachment] : []
     });
     if (picUrl) await fs.rm(picUrl);
 }
 
-function winner(res:string[]) {
+function winner(res: string[]) {
     if (res[0] == 'r') {
         if (res[1] == 'p') return 1;
         else if (res[1] == 's') return 0;
         else return -1;
-    } 
+    }
     else if (res[0] == 'p') {
         if (res[1] == 'r') return 0;
         else if (res[1] == 's') return 1;
         else return -1;
-    } 
+    }
     else { // res[0] == 's'
         if (res[1] == 'r') return 1;
         else if (res[1] == 'p') return 0;
@@ -285,7 +285,7 @@ function winner(res:string[]) {
     }
 }
 
-async function shameImage(_winner:string, _looser:string, id:string) {
+async function shameImage(_winner: string, _looser: string, id: string) {
     let parent = await Jimp.read('./assets/shame.jpg');
     parent = parent.resize(128, 128);
 

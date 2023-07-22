@@ -1,18 +1,18 @@
 import { Message, MessageEmbed } from "discord.js";
-import { register } from "../helpers/registerAll";
-import Users from "../schema/User";
+import { register } from "../helpers/registerAll.js";
+import Users from "../schema/User.js";
 
-import { rewards } from "../data/money.json";
-import { timeRange } from "../helpers/toolbox";
-import updateDb from "../helpers/updateDb";
-import assignCurrency from "../helpers/assignCurrency";
-import { chatLog } from '../data/settings.json';
-import client from "../server";
-import { chat } from '../data/emojis.json';
+import { rewards } from '../data/money.json'
+import { timeRange } from "../helpers/toolbox.js";
+import updateDb from "../helpers/updateDb.js";
+import assignCurrency from "../helpers/assignCurrency.js";
+import { chatLog } from '../data/settings.json'
+import client from "../server.js";
+import { chat } from '../data/emojis.json'
 
-export default async (msg:Message) => {
+export default async (msg: Message) => {
     const author = msg.author;
-    
+
     let user = await Users.findOne({ id: author.id });
     const member = (await msg.guild?.members.fetch())?.find(mem => mem.id == author.id);
     if (!member) return;
@@ -30,7 +30,7 @@ export default async (msg:Message) => {
             fameCollected: 0,
             elixirCollected: 0
         }
-        user = await user.save(); 
+        user = await user.save();
     }
     if (!user.chat) return;
 
@@ -44,7 +44,7 @@ export default async (msg:Message) => {
 
         let reward = 0;
 
-        if (msgsWorthReward >= rewards.chat.bp.a && msgsWorthReward < rewards.chat.bp.b) 
+        if (msgsWorthReward >= rewards.chat.bp.a && msgsWorthReward < rewards.chat.bp.b)
             reward = rewards.chat.a;
         if (msgsWorthReward >= rewards.chat.bp.b && msgsWorthReward < rewards.chat.bp.c)
             reward = rewards.chat.b;
@@ -68,5 +68,5 @@ export default async (msg:Message) => {
     } else {
         await updateDb({ id: user.id }, 'chat.perIntervalMsg', user.chat.perIntervalMsg + 1);
     }
-    
+
 }

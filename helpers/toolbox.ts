@@ -1,9 +1,9 @@
-import client from "../server";
+import client from "../server.js";
 import { TAISHOKU_SERVER_ID } from '../data/impVar.json'
 import { ColorResolvable, CommandInteraction, EmbedField, GuildMember, MessageEmbed, MessageEmbedFooter, ModalSubmitInteraction } from "discord.js";
-import Users from "../schema/User";
+import Users from "../schema/User.js";
 import { FieldsArray, Shop, StdObject } from "../types";
-import { money } from '../data/emojis.json';
+import { money } from '../data/emojis.json'
 
 const regx = {
     title: /<title>[a-zA-Z0-9*/\\&^$#@!:"'.#_{}()[\]\-, ]+<\/title>/g,
@@ -18,12 +18,12 @@ const regx = {
     fieldValue: /-([ ]|)+"(.*)"/g
 }
 
-export async function getUsersByRole (roleId:string, ignoreById:string[]=[], ignoreBots=true) {
+export async function getUsersByRole(roleId: string, ignoreById: string[] = [], ignoreBots = true) {
 
     const server = await client.guilds.fetch(TAISHOKU_SERVER_ID);
 
     let memberCount = 0;
-    let members:GuildMember[] = [];
+    let members: GuildMember[] = [];
 
     for (let member of (await server.members.fetch()).toJSON()) {
         if (ignoreBots) if (member.user.bot) continue;
@@ -36,12 +36,12 @@ export async function getUsersByRole (roleId:string, ignoreById:string[]=[], ign
     };
 
     return {
-        memberCount, 
+        memberCount,
         members
     }
 }
 
-export async function registerGamesIfNot(id:string) {
+export async function registerGamesIfNot(id: string) {
     const user = await Users.findOne({ id });
     if (!user) return;
     user.games = {
@@ -56,11 +56,11 @@ export async function registerGamesIfNot(id:string) {
     return user.save();
 }
 
-export async function isUserOrRole(roleId:string) {
+export async function isUserOrRole(roleId: string) {
 
     const server = await client.guilds.fetch(TAISHOKU_SERVER_ID);
 
-    let targetType:'user'|'role';
+    let targetType: 'user' | 'role';
     try {
         await server.members.fetch(roleId);
         targetType = 'user';
@@ -70,28 +70,28 @@ export async function isUserOrRole(roleId:string) {
     return targetType;
 }
 
-export function timeRange(from:string|undefined, till:string|number|undefined=Date.now()) {
+export function timeRange(from: string | undefined, till: string | number | undefined = Date.now()) {
     till = +till;
-    const deltaTime = till - +(from??0);
+    const deltaTime = till - +(from ?? 0);
 
     const oneDay = 24 * 60 * 60 * 1000;
     return {
         ms: deltaTime,
         seconds: deltaTime / 1000,
         minutes: deltaTime / (1000 * 60),
-        hours: deltaTime / (1000 * 60* 60),
+        hours: deltaTime / (1000 * 60 * 60),
         days: deltaTime / oneDay,
         months: deltaTime / (oneDay * 30),
         years: deltaTime / (oneDay * 365),
         deltaTime,
-        
-        dayLiteral: (deltaTime / oneDay) < 1 ? "less than a day" 
-                    : Math.floor((deltaTime / oneDay)) + 
-                    ` day${Math.floor(deltaTime / oneDay) > 1 ? 's' : ''}`
+
+        dayLiteral: (deltaTime / oneDay) < 1 ? "less than a day"
+            : Math.floor((deltaTime / oneDay)) +
+            ` day${Math.floor(deltaTime / oneDay) > 1 ? 's' : ''}`
     }
 }
 
-export function generateReceipt(user:any, item:Shop, interaction:CommandInteraction|ModalSubmitInteraction, purchaseId:string) {
+export function generateReceipt(user: any, item: Shop, interaction: CommandInteraction | ModalSubmitInteraction, purchaseId: string) {
     return new MessageEmbed({
         title: `${money} PURCHASE RECEIPT`,
         thumbnail: { url: client.user?.displayAvatarURL() },
@@ -106,7 +106,7 @@ export function generateReceipt(user:any, item:Shop, interaction:CommandInteract
 
 
 // experimental
-export function embedBuilder(string:string) {
+export function embedBuilder(string: string) {
     let title = string.match(regx.title);
     let desc = string.match(regx.desc);
     let fields = string.match(regx.fields);
@@ -120,8 +120,8 @@ export function embedBuilder(string:string) {
 
     if (desc) embed.description = extractFromMarkup(desc[0], 'desc', '\n');
     if (fields) {
-        const innerText:string = extractFromMarkup(fields[0], 'fields');
-        const fieldsObject:EmbedField[] = [];
+        const innerText: string = extractFromMarkup(fields[0], 'fields');
+        const fieldsObject: EmbedField[] = [];
         const fieldsArr = innerText.split(',');
 
         for (let field of fieldsArr) {
@@ -157,8 +157,8 @@ export function embedBuilder(string:string) {
             ~url >> "https://ffff"
         </foot>
         `
-        const innerText:string = extractFromMarkup(foot[0], 'foot');
-        let footerObject:MessageEmbedFooter = { 'text': '' };
+        const innerText: string = extractFromMarkup(foot[0], 'foot');
+        let footerObject: MessageEmbedFooter = { 'text': '' };
 
         for (let footer of innerText.split(',')) {
             if (!footer.trim()) continue;
@@ -174,21 +174,21 @@ export function embedBuilder(string:string) {
         embed.footer = footerObject;
     }
     if (thumb) {
-        const innerText:string = extractFromMarkup(thumb[0], 'thumb');
+        const innerText: string = extractFromMarkup(thumb[0], 'thumb');
         embed.thumbnail = { url: innerText.trim() };
     }
     if (color) {
-        const innerText:ColorResolvable = extractFromMarkup(color[0], 'color').trim();
+        const innerText: ColorResolvable = extractFromMarkup(color[0], 'color').trim();
         embed.setColor(innerText);
     }
 
     return embed;
 }
 
-function extractFromMarkup(string:string, tag:string, newL=''):any {
+function extractFromMarkup(string: string, tag: string, newL = ''): any {
     return string.split(`<${tag}>`)[1].split(`</${tag}>`)[0]
-                 .replace(regx.startNewL, newL)
-                 .replace(regx.endNewL, newL);
+        .replace(regx.startNewL, newL)
+        .replace(regx.endNewL, newL);
 }
 
 let string = `

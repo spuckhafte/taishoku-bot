@@ -1,20 +1,20 @@
 import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed } from "discord.js";
 import { CmdoArgs } from "../types";
-import client from "../server";
-import assignCurrency from "../helpers/assignCurrency";
-import updateDb from "../helpers/updateDb";
-import Users from "../schema/User";
-import { timeRange } from "../helpers/toolbox";
+import client from "../server.js";
+import assignCurrency from "../helpers/assignCurrency.js";
+import updateDb from "../helpers/updateDb.js";
+import Users from "../schema/User.js";
+import { timeRange } from "../helpers/toolbox.js";
 
-import missions from '../data/missions.json';
-import { showcase, one, two, three, wrong, clock } from '../data/emojis.json';
-import { missionTiming } from '../data/settings.json';
-import { rewards } from '../data/money.json';
-import timeGap from '../data/timings.json';
+import missions from '../data/missions.json'
+import { showcase, one, two, three, wrong, clock } from '../data/emojis.json'
+import { missionTiming } from '../data/settings.json'
+import { rewards } from '../data/money.json'
+import timeGap from '../data/timings.json'
 
 const emojiOpts = { 1: one, 2: two, 3: three };
 
-export default async (args:CmdoArgs) => {
+export default async (args: CmdoArgs) => {
     const interaction = args.Interaction;
     const mission = missions[Math.floor(Math.random() * missions.length)];
 
@@ -26,7 +26,7 @@ export default async (args:CmdoArgs) => {
         });
         return;
     }
-    
+
     let last = user.missions?.lastMission ? user.missions?.lastMission : 0;
 
     if (timeGap.mission * 1000 > (+Date.now() - +last)) {
@@ -52,8 +52,8 @@ export default async (args:CmdoArgs) => {
     const row = generateOptionButtons(mission);
 
     const msg = await interaction.reply({ embeds: [embed], components: [row], fetchReply: true });
-    
-    const filter = (btn:MessageComponentInteraction) => {
+
+    const filter = (btn: MessageComponentInteraction) => {
         return btn.user.id == interaction.user.id && msg.id == btn.message.id;
     }
 
@@ -67,7 +67,7 @@ export default async (args:CmdoArgs) => {
         });
     }, missionTiming * 1000)
 
-    const collector = interaction.channel?.createMessageComponentCollector({ 
+    const collector = interaction.channel?.createMessageComponentCollector({
         filter, time: missionTiming * 1000, max: 1
     });
 
@@ -97,7 +97,7 @@ export default async (args:CmdoArgs) => {
     })
 }
 
-function generateOptionButtons(mission:any, disabled=false, won=false, timeout=false, choice=mission.correct) {
+function generateOptionButtons(mission: any, disabled = false, won = false, timeout = false, choice = mission.correct) {
     const row = new MessageActionRow();
     for (let opt_i in mission.options) {
         row.addComponents(
@@ -112,7 +112,7 @@ function generateOptionButtons(mission:any, disabled=false, won=false, timeout=f
     return row;
 }
 
-function optionsText(options:string[]) {
+function optionsText(options: string[]) {
     let string = '';
     for (let opt_i in options) {
         const opt = options[opt_i];

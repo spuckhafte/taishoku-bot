@@ -1,18 +1,18 @@
 import Discord, { Intents } from 'discord.js';
 import mongoose from 'mongoose';
-
-import CmdManager from './manager';
 import dotenv from 'dotenv';
-import updateDb from './helpers/updateDb';
-import { register } from './helpers/registerAll';
-import intializeRamenVoteListener from './helpers/ramenVote';
-import manageChat from './helpers/manageChat';
-import Users from './schema/User';
+
+import CmdManager from './manager.js';
+import updateDb from './helpers/updateDb.js';
+import { register } from './helpers/registerAll.js';
+import intializeRamenVoteListener from './helpers/ramenVote.js';
+import manageChat from './helpers/manageChat.js';
+import Users from './schema/User.js';
 
 dotenv.config();
 
-const Commando = new CmdManager('./commands', 'ts');
-const OtherInteractions = new CmdManager('./interactions', 'ts');
+const Commando = new CmdManager('commands', 'js');
+const OtherInteractions = new CmdManager('interactions', 'js');
 const { socket, processVote } = intializeRamenVoteListener();
 
 mongoose.set("strictQuery", false);

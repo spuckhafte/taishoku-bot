@@ -2,19 +2,19 @@ import { Manager, CmdoArgs, SelectMenuArgs, ModalArgs } from "./types";
 import fs from 'fs';
 
 class CmdManager {
-    ResgisteredCommands:Manager;
+    ResgisteredCommands:Manager = {};
 
     constructor(folder:string, lang:'ts'|'js') {
         let fileType = '.' + lang;
-        fs.readdir(folder, (_, files) => {
-            files.forEach(file => {
+        fs.readdir('./dist/' + folder, (_, files) => {
+            for (let file of files) {
                 if (file.endsWith(fileType)) {
-                    const func:CallableFunction = require(`${folder}/${file}`).default;
+                    const func:CallableFunction = require(`${process.cwd()}/dist/${folder}/${file}`).default;
                     let fileName = file.replace(fileType, '');
                     this.ResgisteredCommands = { ...this.ResgisteredCommands },
                     this.ResgisteredCommands[fileName] = func;
                 };
-            })
+            }
         });
     };
 

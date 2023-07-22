@@ -1,31 +1,29 @@
-import assignCurrency from "../helpers/assignCurrency";
+import assignCurrency from "../helpers/assignCurrency.js";
 import { ModalArgs } from "../types";
-import updateDb from "../helpers/updateDb";
-import Users from "../schema/User";
+import updateDb from "../helpers/updateDb.js";
+import Users from "../schema/User.js";
 import { Formatters, MessageEmbed } from "discord.js";
-import client from "../server";
+import client from "../server.js";
 import { v4 } from "uuid";
+import { generateReceipt } from "../helpers/toolbox.js";
 
-import { shop } from "../data/shop.json";
-import { money } from '../data/emojis.json';
+import { shop } from '../data/shop.json'
 import { storeLogsChannel, channelPermissions, customChannelCategory } from '../data/settings.json'
-import { generateReceipt } from "../helpers/toolbox";
 
-
-export default async (args:ModalArgs) => {
+export default async (args: ModalArgs) => {
     const interaction = args.Interaction;
     if (!interaction.guild) return;
     await interaction.deferReply({ ephemeral: true });
 
     const member = (await interaction.guild?.members.fetch())
-                        ?.find(user => user.id == interaction.user.id);
+        ?.find(user => user.id == interaction.user.id);
     const channelName = interaction.fields.getTextInputValue('channelName');
     const channelTopic = interaction.fields.getTextInputValue('channelTopic');
     const channelEmoji = interaction.fields.getTextInputValue('channelEmoji');
     const purchaseId = v4();
 
     if (!member) return;
-    
+
     if (!channelName || !channelTopic || !channelEmoji) {
         interaction.editReply({
             content: "Invalid details, try again"
@@ -37,8 +35,8 @@ export default async (args:ModalArgs) => {
         `${channelEmoji}・「${channelName}」`,
         { parent: customChannelCategory }
     );
-	await channel.permissionOverwrites.edit(interaction.user, channelPermissions);
-	await channel.setTopic(channelTopic);
+    await channel.permissionOverwrites.edit(interaction.user, channelPermissions);
+    await channel.setTopic(channelTopic);
 
 
     const item = shop.find(item => item.name == 'Personal Channel');
@@ -57,7 +55,7 @@ export default async (args:ModalArgs) => {
     await updateDb({ id: user.id }, 'inventory.goods.5.total', (prev ? prev : 0) + 1);
 
     const embed = generateReceipt(user, item, interaction, purchaseId);
-    await interaction.editReply({ 
+    await interaction.editReply({
         embeds: [embed],
         content: `<@${user.id}>, here is your personal channel: ${Formatters.channelMention(channel.id)}`
     });
